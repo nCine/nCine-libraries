@@ -25,15 +25,18 @@ if(MSVC)
 			COMMAND ${CMAKE_COMMAND} -E copy_directory ${EP_BASE}/Source/project_${TARGET_GLFW}/include/GLFW ${INCDIR}/GLFW
 	)
 elseif(APPLE)
-	# GLFW > 3.0.x cannot open a window when OS X runs in a virtual machine
-	set(URL_GLFW https://github.com/glfw/glfw/archive/3.0.4.zip)
-	set(URL_MD5_GLFW 608d5cb50325f41d154fe1cc42061606)
+	if(GLFW_VIRTUALIZED_OSX)
+		set(GLFW_PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/patches/glfw-virtualized_osx.patch)
+		message(STATUS "Virtualized OS X patch is going to be applied")
+	endif()
+
 	set(FRAMEWORK_DIR_GLFW ${DESTINATION_PATH}/${TARGET_GLFW}.framework)
 	set(DYLIBNAME_GLFW libglfw.3.dylib)
 
 	ExternalProject_Add(project_${TARGET_GLFW}
 		URL ${URL_GLFW}
 		URL_MD5 ${URL_MD5_GLFW}
+		PATCH_COMMAND ${GLFW_PATCH_COMMAND}
 		CMAKE_ARGS ${COMMON_CMAKE_ARGS_GLFW} -DGLFW_INSTALL=OFF
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_GLFW}/Versions/A

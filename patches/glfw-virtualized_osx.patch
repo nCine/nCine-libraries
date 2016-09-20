@@ -1,0 +1,11 @@
+diff -urN project_glfw.orig/src/nsgl_context.m project_glfw/src/nsgl_context.m
+--- project_glfw.orig/src/nsgl_context.m	2016-08-18 12:32:27.000000000 +0100
++++ project_glfw/src/nsgl_context.m	2016-09-20 19:45:01.000000000 +0100
+@@ -164,7 +164,6 @@
+     // Arbitrary array size here
+     NSOpenGLPixelFormatAttribute attributes[40];
+ 
+-    ADD_ATTR(NSOpenGLPFAAccelerated);
+     ADD_ATTR(NSOpenGLPFAClosestPolicy);
+ 
+ #if MAC_OS_X_VERSION_MAX_ALLOWED >= 101000
