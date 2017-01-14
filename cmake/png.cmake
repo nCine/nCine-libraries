@@ -3,8 +3,8 @@ if(NOT DEFINED TARGET_ZLIB)
 endif()
 
 set(TARGET_PNG png)
-set(URL_PNG http://downloads.sourceforge.net/project/libpng/libpng16/1.6.26/libpng-1.6.26.tar.gz)
-set(URL_MD5_PNG 236cd975520fc1f34cc0b8f0e615f7a0)
+set(URL_PNG http://downloads.sourceforge.net/project/libpng/libpng16/1.6.28/libpng-1.6.28.tar.gz)
+set(URL_MD5_PNG 897ccec1ebfb0922e83c2bfaa1be8748)
 set(LIBNAME_PNG libpng16)
 set(COMMON_CMAKE_ARGS_PNG -DPNG_TESTS=OFF)
 
@@ -45,7 +45,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_PNG ${DESTINATION_PATH}/${TARGET_PNG}.framework)
-	set(DYLIBNAME_PNG libpng16.16.26.0.dylib)
+	set(DYLIBNAME_PNG libpng16.16.28.0.dylib)
 
 	ExternalProject_Add(project_${TARGET_PNG}
 		DEPENDS project_${TARGET_ZLIB}
