@@ -36,9 +36,9 @@ if(MSVC)
 		URL_MD5 ${URL_MD5_PNG}
 		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CONFIGURATION} -DZLIB_LIBRARY=${LIBFILE_ZLIB_LIBDYN} -DZLIB_INCLUDE_DIR=${LIBDIR_ZLIB} ${COMMON_CMAKE_ARGS_PNG} -DSKIP_INSTALL_ALL=1
 		BUILD_IN_SOURCE 0
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_NOEXT}.dll ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_NOEXT}.lib ${LIBDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_LIB} ${LIBDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_NOEXT}.dll ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_NOEXT}.lib ${LIBDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_LIB} ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_PNG}/png.h ${INCDIR}/png.h
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_PNG}/pngconf.h ${INCDIR}/pngconf.h
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_PNG}/scripts/pnglibconf.h.prebuilt ${INCDIR}/pnglibconf.h 

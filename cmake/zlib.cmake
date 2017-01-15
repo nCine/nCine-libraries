@@ -15,10 +15,10 @@ if(MSVC)
 		URL_MD5 ${URL_MD5_ZLIB}
 		BUILD_COMMAND nmake -f win32/Makefile.msc
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_DLL} ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_LIBDYN} ${LIBDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_LIB} ${LIBDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different zlib.h ${INCDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_DLL} ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_LIBDYN} ${LIBDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_LIB} ${LIBDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different zlib.h ${INCDIR}/
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_ZLIB ${DESTINATION_PATH}/${TARGET_ZLIB}.framework)

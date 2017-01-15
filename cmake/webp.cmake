@@ -23,10 +23,10 @@ if(MSVC)
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND nmake /f Makefile.vc CFG=${CONFIG_WEBP} OBJDIR=.
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/bin/${LIBNAME_WEBP}.dll ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/bin/${LIBNAME_WEBPDECODER}.dll ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBP_LIBDYN}.lib ${LIBDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBPDECODER_LIBDYN}.lib ${LIBDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/bin/${LIBNAME_WEBP}.dll ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/bin/${LIBNAME_WEBPDECODER}.dll ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBP_LIBDYN}.lib ${LIBDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBPDECODER_LIBDYN}.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_directory src/webp ${INCDIR}/webp
 			COMMAND ${CMAKE_COMMAND} -E remove ${INCDIR}/webp/config.h.in
 	)

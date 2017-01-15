@@ -16,9 +16,9 @@ if(MSVC)
 		BUILD_COMMAND msbuild VisualC/SDL/SDL.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM}
 			COMMAND msbuild VisualC/SDLmain/SDLmain.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM}
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDL} ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDL_LIBDYN} ${LIBDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDLMAIN} ${LIBDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDL} ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDL_LIBDYN} ${LIBDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDLMAIN} ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_directory include ${INCDIR}/SDL
 			COMMAND ${CMAKE_COMMAND} -E remove ${INCDIR}/SDL/doxyfile
 			COMMAND ${CMAKE_COMMAND} -E remove ${INCDIR}/SDL/SDL_config.h.default

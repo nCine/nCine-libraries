@@ -12,8 +12,8 @@ if(MSVC)
 		CONFIGURE_COMMAND devenv win32/VS2010/libogg_dynamic.vcxproj /Upgrade
 		BUILD_COMMAND msbuild win32/VS2010/libogg_dynamic.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET}
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}.dll ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}.lib ${LIBDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}.dll ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/ogg/ogg.h ${INCDIR}/ogg/ogg.h
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/ogg/os_types.h ${INCDIR}/ogg/os_types.h
 	)

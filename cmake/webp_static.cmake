@@ -16,7 +16,7 @@ if(MSVC)
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND nmake /f Makefile.vc CFG=${CONFIG_WEBP} OBJDIR=.
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBP}.lib ${LIBDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBP}.lib ${LIBDIR}/
 	)
 # Supporting only frameworks on OS X
 elseif(NOT APPLE)

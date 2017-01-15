@@ -20,8 +20,8 @@ if(MSVC)
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_SDL} COMMAND set LINK=/LIBPATH:${LIBDIR_SDL}
 			COMMAND msbuild VisualC/SDL_image.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM}
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDLIMAGE_NOEXT}.dll ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDLIMAGE_NOEXT}.lib ${LIBDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDLIMAGE_NOEXT}.dll ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDLIMAGE_NOEXT}.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different SDL_image.h ${INCDIR}/SDL
 	)
 elseif(NOT APPLE) # SDL 1.2.15 doesn't compile on Os X 10.9 and later	

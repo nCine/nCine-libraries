@@ -23,8 +23,8 @@ if(MSVC)
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
 			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_dynamic.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET}
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}.dll ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}.lib ${LIBDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}.dll ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/codec.h ${INCDIR}/vorbis/codec.h
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/vorbisenc.h ${INCDIR}/vorbis/vorbisenc.h
 	)
@@ -40,8 +40,8 @@ if(MSVC)
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG} /LIBPATH:${LIBDIR_VORBIS}
 			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_dynamic.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET}
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.dll ${BINDIR}
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.lib ${LIBDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.dll ${BINDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/vorbisfile.h ${INCDIR}/vorbis/vorbisfile.h
 	)
 elseif(APPLE)

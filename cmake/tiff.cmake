@@ -14,7 +14,7 @@ if(MSVC)
 		CONFIGURE_COMMAND ""
 		BUILD_COMMAND nmake -f Makefile.vc
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_TIFF_NOEXT}.dll ${BINDIR}
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_TIFF_NOEXT}.dll ${BINDIR}/
 	)
 elseif(NOT APPLE)
 	ExternalProject_Add(project_${TARGET_TIFF}
