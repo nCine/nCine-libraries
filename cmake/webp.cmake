@@ -1,6 +1,6 @@
 set(TARGET_WEBP webp)
-set(URL_WEBP http://downloads.webmproject.org/releases/webp/libwebp-0.5.2.tar.gz)
-set(URL_MD5_WEBP 6f36b38c2483b32906f946a621eb0c2e)
+set(URL_WEBP http://downloads.webmproject.org/releases/webp/libwebp-0.6.0.tar.gz)
+set(URL_MD5_WEBP 19a6e926ab1721268df03161b84bb4a0)
 set(LIBNAME_WEBP libwebp)
 set(LIBNAME_WEBPDECODER libwebpdecoder)
 set(LIBNAME_WEBP_LIBDYN libwebp_dll) # for dynamic linking
@@ -32,7 +32,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_WEBP ${DESTINATION_PATH}/${TARGET_WEBP}.framework)
-	set(DYLIBNAME_WEBP libwebp.6.dylib)
+	set(DYLIBNAME_WEBP libwebp.7.dylib)
 
 	ExternalProject_Add(project_${TARGET_WEBP}
 		URL ${URL_WEBP}
