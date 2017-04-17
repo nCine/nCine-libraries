@@ -24,12 +24,29 @@ if(MSVC)
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${BINDIR_GLEW}/${LIBNAME_GLEW}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBDIR_GLEW}/${LIBNAME_GLEW}.lib ${LIBDIR}/
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/GL/glew.h ${INCDIR}/GL/glew.h
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/GL/glxew.h ${INCDIR}/GL/glxew.h
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/GL/wglew.h ${INCDIR}/GL/wglew.h
+			COMMAND ${CMAKE_COMMAND} -E copy_directory include/GL ${INCDIR}/GL
 	)
-# Unneeded on OS X
-elseif(NOT APPLE)
+elseif(APPLE)
+	set(FRAMEWORK_DIR_GLEW ${DESTINATION_PATH}/${TARGET_GLEW}.framework)
+	set(DYLIBNAME_GLEW libGLEW.dylib)
+
+	ExternalProject_Add(project_${TARGET_GLEW}
+		URL ${URL_GLEW}
+		URL_MD5 ${URL_MD5_GLEW}
+		CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch CMakeLists.txt
+			COMMAND ${CMAKE_COMMAND} build/cmake -DBUILD_UTILS=OFF -DCMAKE_INSTALL_PREFIX=${DESTINATION_PATH}
+		BUILD_COMMAND ${PARALLEL_MAKE}
+		BUILD_IN_SOURCE 1
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_GLEW}/Versions/A
+			COMMAND ${CMAKE_COMMAND} -E create_symlink A ${FRAMEWORK_DIR_GLEW}/Versions/Current
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different lib/${DYLIBNAME_GLEW} ${FRAMEWORK_DIR_GLEW}/Versions/A/
+			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/${DYLIBNAME_GLEW} ${FRAMEWORK_DIR_GLEW}/${TARGET_GLEW}
+			COMMAND install_name_tool -id "@rpath/${TARGET_GLEW}.framework/${TARGET_GLEW}" ${FRAMEWORK_DIR_GLEW}/${TARGET_GLEW}
+			COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_GLEW}/Versions/A/Headers/
+			COMMAND ${CMAKE_COMMAND} -E copy_directory include/GL ${FRAMEWORK_DIR_GLEW}/Versions/A/Headers/GL
+			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_GLEW}/Headers
+	)
+else()
 	ExternalProject_Add(project_${TARGET_GLEW}
 		URL ${URL_GLEW}
 		URL_MD5 ${URL_MD5_GLEW}
