@@ -1,6 +1,6 @@
 set(TARGET_OPENAL openal)
-set(URL_OPENAL http://kcat.strangesoft.net/openal-releases/openal-soft-1.17.2.tar.bz2)
-set(URL_MD5_OPENAL 1764e0d8fec499589b47ebc724e0913d)
+set(URL_OPENAL http://kcat.strangesoft.net/openal-releases/openal-soft-1.18.0.tar.bz2)
+set(URL_MD5_OPENAL 704d41343b52dd04115de2dcdac5de03)
 set(COMMON_CMAKE_ARGS_OPENAL -DALSOFT_UTILS=OFF -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF -DALSOFT_CONFIG=OFF)
 
 if(MSVC)
@@ -18,7 +18,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_OPENAL ${DESTINATION_PATH}/${TARGET_OPENAL}.framework)
-	set(DYLIBNAME_OPENAL libopenal.1.17.2.dylib)
+	set(DYLIBNAME_OPENAL libopenal.1.18.0.dylib)
 
 	ExternalProject_Add(project_${TARGET_OPENAL}
 		URL ${URL_OPENAL}
@@ -36,8 +36,6 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_OPENAL}/Headers
 	)
 else()
-	set(LIBNAME_OPENAL libopenal12)
-
 	ExternalProject_Add(project_${TARGET_OPENAL}
 		URL ${URL_OPENAL}
 		URL_MD5 ${URL_MD5_OPENAL}
