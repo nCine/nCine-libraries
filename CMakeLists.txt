@@ -30,8 +30,6 @@ if(MSVC)
 
 	if(MSVC_IDE)
 		set(CONFIGURATION $<CONFIGURATION>)
-	else()
-		set(CONFIGURATION ${CMAKE_BUILD_TYPE})
 	endif()
 endif()
 
