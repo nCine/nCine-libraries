@@ -10,6 +10,7 @@ This repository contains the scripts to easily compile the libraries needed by t
 - libpng
 - GLEW
 - GLFW
+- SDL2
 - libogg
 - libvorbis
 - OpenAL-soft
