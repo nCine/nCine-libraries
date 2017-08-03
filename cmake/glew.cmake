@@ -1,6 +1,6 @@
 set(TARGET_GLEW glew)
-set(URL_GLEW http://sourceforge.net/projects/glew/files/glew/2.0.0/glew-2.0.0.tgz/download)
-set(URL_MD5_GLEW 2a2cd7c98f13854d2fcddae0d2b20411)
+set(URL_GLEW http://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.tgz/download)
+set(URL_MD5_GLEW b2ab12331033ddfaa50dc39345343980)
 
 if(MSVC)
 	if(MSVC_IDE)
