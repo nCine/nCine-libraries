@@ -3,8 +3,8 @@ if(NOT DEFINED TARGET_OGG)
 endif()
 
 set(TARGET_VORBIS vorbis)
-set(URL_VORBIS http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.5.tar.gz)
-set(URL_MD5_VORBIS 7220e089f3be3412a2317d6fde9e3944)
+set(URL_VORBIS http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.6.tar.gz)
+set(URL_MD5_VORBIS d3190649b26572d44cd1e4f553943b31)
 
 set(LIBNAME_VORBIS libvorbis)
 set(TARGET_VORBISFILE vorbisfile)
