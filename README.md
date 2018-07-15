@@ -14,6 +14,7 @@ This repository contains the scripts to easily compile the libraries needed by t
 - libogg
 - libvorbis
 - OpenAL-soft
+- Lua
 
 ## Build
 To compile the libraries on Windows:
