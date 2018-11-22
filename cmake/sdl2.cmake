@@ -1,6 +1,6 @@
 set(TARGET_SDL2 sdl2)
-set(URL_SDL2 https://www.libsdl.org/release/SDL2-2.0.8.tar.gz)
-set(URL_MD5_SDL2 3800d705cef742c6a634f202c37f263f)
+set(URL_SDL2 https://www.libsdl.org/release/SDL2-2.0.9.tar.gz)
+set(URL_MD5_SDL2 f2ecfba915c54f7200f504d8b48a5dfe)
 set(LIBNAME_SDL2 SDL2)
 set(LIBNAME_SDL2MAIN SDL2main)
 
@@ -30,7 +30,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_SDL2 ${DESTINATION_PATH}/${TARGET_SDL2}.framework)
-	set(DYLIBNAME_SDL2 libSDL2.dylib)
+	set(DYLIBNAME_SDL2 libSDL2-2.0.dylib)
 
 	ExternalProject_Add(project_${TARGET_SDL2}
 		URL ${URL_SDL2}
