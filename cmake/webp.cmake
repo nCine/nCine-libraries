@@ -1,12 +1,18 @@
 set(TARGET_WEBP webp)
-set(URL_WEBP http://downloads.webmproject.org/releases/webp/libwebp-1.0.1.tar.gz)
-set(URL_MD5_WEBP ba72dfa7588c751a3a9b735a6746a23e)
+set(URL_WEBP http://downloads.webmproject.org/releases/webp/libwebp-1.0.2.tar.gz)
+set(URL_MD5_WEBP 02c0c55f1dd8612cd4d462e3409ad35d)
 set(LIBNAME_WEBP libwebp)
 set(LIBNAME_WEBPDECODER libwebpdecoder)
 set(LIBNAME_WEBP_LIBDYN libwebp_dll) # for dynamic linking
 set(LIBNAME_WEBPDECODER_LIBDYN libwebpdecoder_dll) # for dynamic linking
 
 if(MSVC)
+	if(CMAKE_CL_64)
+		set(ARCH_WEBP "x64")
+	else()
+		set(ARCH_WEBP "x86")
+	endif()
+
 	set(CONFIG_WEBP release-dynamic)
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		set(CONFIG_WEBP debug-dynamic)
@@ -21,7 +27,7 @@ if(MSVC)
 		URL ${URL_WEBP}
 		URL_MD5 ${URL_MD5_WEBP}
 		CONFIGURE_COMMAND ""
-		BUILD_COMMAND nmake /f Makefile.vc CFG=${CONFIG_WEBP} OBJDIR=.
+		BUILD_COMMAND nmake /f Makefile.vc ARCH=${ARCH_WEBP} CFG=${CONFIG_WEBP} OBJDIR=.
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/bin/${LIBNAME_WEBP}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/bin/${LIBNAME_WEBPDECODER}.dll ${BINDIR}/
