@@ -1,11 +1,11 @@
-diff -urN project_glfw.orig/src/nsgl_context.m project_glfw/src/nsgl_context.m
---- project_glfw.orig/src/nsgl_context.m	2016-08-18 12:32:27.000000000 +0100
-+++ project_glfw/src/nsgl_context.m	2016-09-20 19:45:01.000000000 +0100
-@@ -164,7 +164,6 @@
-     // Arbitrary array size here
-     NSOpenGLPixelFormatAttribute attributes[40];
+diff -urN glfw-3.3.orig/src/nsgl_context.m glfw-3.3/src/nsgl_context.m
+--- glfw-3.3.orig/src/nsgl_context.m	2019-04-16 01:40:30.000000000 +0200
++++ glfw-3.3/src/nsgl_context.m	2019-04-17 21:05:49.868491719 +0200
+@@ -225,7 +225,6 @@
+     NSOpenGLPixelFormatAttribute attribs[40];
+     int index = 0;
  
--    ADD_ATTR(NSOpenGLPFAAccelerated);
-     ADD_ATTR(NSOpenGLPFAClosestPolicy);
+-    addAttrib(NSOpenGLPFAAccelerated);
+     addAttrib(NSOpenGLPFAClosestPolicy);
  
- #if MAC_OS_X_VERSION_MAX_ALLOWED >= 101000
+     if (ctxconfig->nsgl.offline)
