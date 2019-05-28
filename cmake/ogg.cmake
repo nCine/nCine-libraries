@@ -27,7 +27,7 @@ if(MSVC)
 		CONFIGURE_COMMAND devenv win32/VS2010/libogg_static.vcxproj /Upgrade
 		BUILD_COMMAND msbuild win32/VS2010/libogg_static.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
-		#INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}_static.lib ${LIBDIR}/
+		INSTALL_COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}_static.lib ${LIBDIR}/
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_OGG ${DESTINATION_PATH}/${TARGET_OGG}.framework)

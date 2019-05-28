@@ -28,6 +28,17 @@ if(MSVC)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/codec.h ${INCDIR}/vorbis/codec.h
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/vorbisenc.h ${INCDIR}/vorbis/vorbisenc.h
 	)
+	set(TARGET_VORBIS_STATIC vorbis_static)
+	ExternalProject_Add(project_${TARGET_VORBIS_STATIC}
+		DEPENDS project_${TARGET_VORBIS}
+		DOWNLOAD_COMMAND ""
+		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
+		CONFIGURE_COMMAND devenv win32/VS2010/libvorbis/libvorbis_static.vcxproj /Upgrade
+		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
+			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_static.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+		BUILD_IN_SOURCE 1
+		INSTALL_COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}_static.lib ${LIBDIR}/
+	)
 
 	set(LIBFILE_VORBISFILE_NOEXT ${EP_BASE}/Source/project_${TARGET_VORBIS}/win32/VS2010/libvorbisfile/${PLATFORM}/${CONFIGURATION}/${LIBNAME_VORBISFILE})
 
@@ -43,6 +54,17 @@ if(MSVC)
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/vorbisfile.h ${INCDIR}/vorbis/vorbisfile.h
+	)
+	set(TARGET_VORBISFILE_STATIC vorbisfile_static)
+	ExternalProject_Add(project_${TARGET_VORBISFILE_STATIC}
+		DEPENDS project_${TARGET_VORBISFILE}
+		DOWNLOAD_COMMAND ""
+		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
+		CONFIGURE_COMMAND devenv win32/VS2010/libvorbisfile/libvorbisfile_static.vcxproj /Upgrade
+		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
+			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_static.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+		BUILD_IN_SOURCE 1
+		INSTALL_COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}_static.lib ${LIBDIR}/
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_VORBIS ${DESTINATION_PATH}/${TARGET_VORBIS}.framework)
