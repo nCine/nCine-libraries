@@ -1,0 +1,158 @@
+variables:
+  deploy_file_noext: nCine-external-OS-COMPILER-VERSION
+  deploy_message:
+    "Push artifact from Azure Pipelines build $(Build.BuildNumber) with id $(Build.BuildId)
+
+     - nCine-libraries artifact from branch '$(Build.SourceBranchName)' with commit id $(Build.SourceVersion)"
+  deploy_branch: libraries-OS-COMPILER
+
+jobs:
+- job: Linux_macOS
+  displayName: Linux and macOS
+
+  strategy:
+    matrix:
+      Linux GCC:
+        imageName: 'ubuntu-16.04'
+        CC: gcc
+        CXX: g++
+
+      Linux Clang:
+        imageName: 'ubuntu-16.04'
+        CC: clang
+        CXX: clang++
+
+      macOS:
+        imageName: 'macOS-10.14'
+
+  pool:
+    vmImage: $(imageName)
+
+  steps:
+  - script: |
+      sudo apt-get update
+      sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libasound2-dev libpulse-dev
+
+    displayName: 'Install Build Dependencies on Linux'
+    condition: eq( variables['Agent.OS'], 'Linux' )
+
+  - script: |
+      curl -fsSL https://cmake.org/files/v3.14/cmake-3.14.5-Linux-x86_64.sh -o cmakeinstall.sh && \
+      chmod +x cmakeinstall.sh && \
+      sudo ./cmakeinstall.sh --prefix=/usr/local --exclude-subdir && \
+      rm cmakeinstall.sh
+
+    displayName: 'Install Latest CMake on Linux'
+    condition: eq( variables['Agent.OS'], 'Linux' )
+
+  - script: |
+      cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=Release
+
+    displayName: 'CMake Configuration'
+
+  - script: |
+      make -j2 -C ../nCine-libraries-build
+
+    displayName: 'Make'
+
+  - script: |
+      git config --global user.email "pipelines@azure.com"
+      git config --global user.name "Azure Pipelines"
+
+      if [ "$(Agent.OS)" == "Linux" ]; then
+        export OS=linux
+      elif [ "$(Agent.OS)" == "Darwin" ]; then
+        export OS=darwin
+        export CC=appleclang
+      fi
+
+      git fetch --unshallow || true
+      export GIT_VERSION=$(set -o pipefail; git describe --tags --long 2>/dev/null | sed 's/\([^-]*-g\)/r\1/;s/-/./g' || printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)";)
+      cd ..
+
+      export DEPLOY_FILE=$DEPLOY_FILE_NOEXT.tar.gz
+      export DEPLOY_FILE=`echo $DEPLOY_FILE | sed 's/OS/'"$OS"'/'`
+      export DEPLOY_FILE=`echo $DEPLOY_FILE | sed 's/COMPILER/'"$CC"'/'`
+      export DEPLOY_FILE=`echo $DEPLOY_FILE | sed 's/VERSION/'"$GIT_VERSION"'/'`
+      tar cpzf $DEPLOY_FILE nCine-external
+
+      export DEPLOY_BRANCH=`echo $DEPLOY_BRANCH | sed 's/OS/'"$OS"'/'`
+      export DEPLOY_BRANCH=`echo $DEPLOY_BRANCH | sed 's/COMPILER/'"$CC"'/'`
+      git clone https://$MAPPED_GH_TOKEN@github.com/nCine/nCine-libraries-artifacts.git >/dev/null 2>&1
+      cd nCine-libraries-artifacts
+      git checkout $DEPLOY_BRANCH || git checkout --orphan $DEPLOY_BRANCH
+      git reset
+      git rm *
+      mv -f ../$DEPLOY_FILE .
+      git add $DEPLOY_FILE
+      git commit --amend -m "$(DEPLOY_MESSAGE)" || git commit -m "$(DEPLOY_MESSAGE)"
+      git push --force || git push --set-upstream origin $DEPLOY_BRANCH
+
+    displayName: 'Push Artifacts'
+    condition: succeeded()
+    env:
+      MAPPED_GH_TOKEN: $(GH_TOKEN)
+
+- job: Windows
+
+  strategy:
+    matrix:
+      VS2017:
+        imageName: 'vs2017-win2016'
+
+      VS2019:
+        imageName: 'windows-2019'
+
+  pool:
+    vmImage: $(imageName)
+
+  steps:
+  - powershell: |
+      $env:generator = switch ("$(imageName)")
+      {
+        "windows-2019" {"Visual Studio 16 2019"}
+        "vs2017-win2016" {"Visual Studio 15 2017"}
+      }
+      cmake -G "$env:generator" -A x64 -B ../nCine-libraries-build
+
+    displayName: 'CMake Configuration'
+
+  - powershell: |
+      cmake --build ../nCine-libraries-build --config Release
+
+    displayName: 'CMake Build'
+
+  - powershell: |
+      $env:GIT_REDIRECT_STDERR = '2>&1'
+      git config --global user.email "pipelines@azure.com"
+      git config --global user.name "Azure Pipelines"
+
+      $env:vsversion = switch ("$(imageName)")
+      {
+        "windows-2019" {"vs2019"}
+        "vs2017-win2016" {"vs2017"}
+      }
+
+      git fetch --unshallow; if (-not $?) { return }
+      git describe --tags --long 2>$null; if ($?) { $env:git_version = git describe --tags --long 2>$null | %{$_ -replace "([^-]*-g)","r`$1" -replace "-","."} } else { $env:git_version = -join("r", $(git rev-list --count HEAD), ".", $(git rev-parse --short HEAD)) }
+      cd ..
+
+      $env:DEPLOY_FILE = -join($env:DEPLOY_FILE_NOEXT, ".7z")
+      $env:DEPLOY_FILE = $env:DEPLOY_FILE -replace "OS","windows" -replace "COMPILER",$env:vsversion -replace "VERSION",$env:git_version
+      $env:DEPLOY_BRANCH = $env:DEPLOY_BRANCH -replace "OS","windows" -replace "COMPILER",$env:vsversion
+      7z a $env:DEPLOY_FILE nCine-external
+
+      git clone https://$env:MAPPED_GH_TOKEN@github.com/nCine/nCine-libraries-artifacts.git 2>&1>$null
+      cd nCine-libraries-artifacts
+      git checkout $env:DEPLOY_BRANCH; if (-not $?) { git checkout --orphan $env:DEPLOY_BRANCH }
+      git reset
+      git rm *
+      Move-Item -Path ..\$env:DEPLOY_FILE -Destination .
+      git add $env:DEPLOY_FILE
+      git commit --amend -m "$env:DEPLOY_MESSAGE"; if (-not $?) { git commit -m "$env:DEPLOY_MESSAGE" }
+      git push --force; if (-not $?) { git push --set-upstream origin $env:DEPLOY_BRANCH }
+
+    displayName: 'Push Artifacts'
+    condition: succeeded()
+    env:
+      MAPPED_GH_TOKEN: $(GH_TOKEN)
