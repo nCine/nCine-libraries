@@ -53,7 +53,7 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different macosx/Info.plist ${FRAMEWORK_DIR_OGG}/Versions/A/Resources/
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Resources ${FRAMEWORK_DIR_OGG}/Resources
 	)
-else()
+elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_OGG}
 		URL ${URL_OGG}
 		URL_MD5 ${URL_MD5_OGG}

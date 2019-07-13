@@ -56,6 +56,20 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E remove ${FRAMEWORK_DIR_WEBP}/Versions/A/Headers/config.h.in
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_WEBP}/Headers
 	)
+elseif(EMSCRIPTEN)
+	set(PROJECT_BUILD_WEBP ${EP_BASE}/Build/project_${TARGET_WEBP})
+
+	ExternalProject_Add(project_${TARGET_WEBP}
+		URL ${URL_WEBP}
+		URL_MD5 ${URL_MD5_WEBP}
+		CMAKE_COMMAND emcmake ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR}
+		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CONFIGURATION} -DWEBP_BUILD_WEBP_JS=ON
+		BUILD_IN_SOURCE 0
+		INSTALL_COMMAND COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_WEBP}/${LIBNAME_WEBP}.a ${DESTINATION_PATH}/lib/${LIBNAME_WEBP}.a
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_WEBP}/${LIBNAME_WEBPDECODER}.a ${DESTINATION_PATH}/lib/${LIBNAME_WEBPDECODER}.a
+			COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SRC_WEBP}/src/webp ${DESTINATION_PATH}/include/webp
+			COMMAND ${CMAKE_COMMAND} -E remove ${DESTINATION_PATH}/include/webp/config.h.in
+	)
 else()
 	ExternalProject_Add(project_${TARGET_WEBP}
 		URL ${URL_WEBP}

@@ -68,7 +68,7 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different pnglibconf.h ${FRAMEWORK_DIR_PNG}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_PNG}/Headers
 	)
-else()
+elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_PNG}
 		DEPENDS project_${TARGET_ZLIB}
 		URL ${URL_PNG}

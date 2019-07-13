@@ -19,7 +19,7 @@ if(MSVC)
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_GLFW_LIB} ${LIBDIR}/
 	)
 # Supporting only frameworks on OS X
-elseif(NOT APPLE)
+elseif(NOT APPLE AND NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_GLFW_STATIC}
 		DEPENDS project_${TARGET_GLFW}
 		DOWNLOAD_COMMAND ""

@@ -47,7 +47,7 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_directory ${EP_BASE}/Source/project_${TARGET_GLFW}/include/GLFW ${FRAMEWORK_DIR_GLFW}/Versions/A/Headers
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_GLFW}/Headers
 	)
-else()
+elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_GLFW}
 		URL ${URL_GLFW}
 		URL_MD5 ${URL_MD5_GLFW}

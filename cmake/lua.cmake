@@ -51,6 +51,25 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lua.hpp ${FRAMEWORK_DIR_LUA}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_LUA}/Headers
 	)
+elseif(EMSCRIPTEN)
+	ExternalProject_Add(project_${TARGET_LUA}
+		URL ${URL_LUA}
+		URL_MD5 ${URL_MD5_LUA}
+		PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/patches/CMakeLists_lua.txt ${PROJECT_SRC_LUA}/CMakeLists.txt
+		CMAKE_COMMAND emcmake ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR}
+		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CONFIGURATION}
+		BUILD_IN_SOURCE 0
+		INSTALL_COMMAND COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/liblua.a ${DESTINATION_PATH}/lib/liblua.a
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/lua.js ${DESTINATION_PATH}/bin/lua.js
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/lua.wasm ${DESTINATION_PATH}/bin/lua.wasm
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/luac.js ${DESTINATION_PATH}/bin/luac.js
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/luac.wasm ${DESTINATION_PATH}/bin/luac.wasm
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lua.h ${DESTINATION_PATH}/include/lua.h
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/luaconf.h ${DESTINATION_PATH}/include/luaconf.h
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lualib.h ${DESTINATION_PATH}/include/lualib.h
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lauxlib.h ${DESTINATION_PATH}/include/lauxlib.h
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lua.hpp ${DESTINATION_PATH}/include/lua.hpp
+	)
 else()
 	ExternalProject_Add(project_${TARGET_LUA}
 		URL ${URL_LUA}

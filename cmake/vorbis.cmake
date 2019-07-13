@@ -114,7 +114,7 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/vorbisfile.h ${FRAMEWORK_DIR_VORBISFILE}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_VORBISFILE}/Headers
 	)
-else()
+elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_VORBIS}
 		DEPENDS project_${TARGET_OGG}
 		URL ${URL_VORBIS}

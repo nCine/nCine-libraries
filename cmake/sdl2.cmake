@@ -54,7 +54,7 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_SDL2}/Xcode/SDL/Info-Framework.plist ${FRAMEWORK_DIR_SDL2}/Versions/A/Resources/Info.plist
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Resources ${FRAMEWORK_DIR_SDL2}/Resources
 	)
-else()
+elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_SDL2}
 		URL ${URL_SDL2}
 		URL_MD5 ${URL_MD5_SDL2}

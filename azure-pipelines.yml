@@ -7,8 +7,8 @@ variables:
   deploy_branch: libraries-OS-COMPILER
 
 jobs:
-- job: Linux_macOS
-  displayName: Linux and macOS
+- job: Non_Windows
+  displayName: Linux, macOS and Emscripten
 
   strategy:
     matrix:
@@ -24,6 +24,11 @@ jobs:
 
       macOS:
         imageName: 'macOS-10.14'
+
+      Emscripten:
+        imageName: 'ubuntu-16.04'
+        OS: emscripten
+        CC: emcc
 
   pool:
     vmImage: $(imageName)
@@ -46,11 +51,33 @@ jobs:
     condition: eq( variables['Agent.OS'], 'Linux' )
 
   - script: |
+      cd ..
+      git clone https://github.com/emscripten-core/emsdk.git
+      cd emsdk
+      ./emsdk install latest
+      ./emsdk activate latest
+
+    displayName: 'Install Emscripten SDK'
+    condition: eq( variables['OS'], 'emscripten' )
+
+  - script: |
       cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=Release
 
     displayName: 'CMake Configuration'
+    condition: ne( variables['OS'], 'emscripten' )
 
   - script: |
+      source ../emsdk/emsdk_env.sh
+      emcmake cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=Release
+
+    displayName: 'CMake Configuration for Emscripten'
+    condition: eq( variables['OS'], 'emscripten' )
+
+  - script: |
+      if [ "$OS" == "emscripten" ]; then
+        source ../emsdk/emsdk_env.sh
+      fi
+
       make -j2 -C ../nCine-libraries-build
 
     displayName: 'Make'
@@ -59,7 +86,7 @@ jobs:
       git config --global user.email "pipelines@azure.com"
       git config --global user.name "Azure Pipelines"
 
-      if [ "$(Agent.OS)" == "Linux" ]; then
+      if [ "$(Agent.OS)" == "Linux" ] && [ "$OS" != "emscripten" ]; then
         export OS=linux
       elif [ "$(Agent.OS)" == "Darwin" ]; then
         export OS=darwin
@@ -74,7 +101,12 @@ jobs:
       export DEPLOY_FILE=`echo $DEPLOY_FILE | sed 's/OS/'"$OS"'/'`
       export DEPLOY_FILE=`echo $DEPLOY_FILE | sed 's/COMPILER/'"$CC"'/'`
       export DEPLOY_FILE=`echo $DEPLOY_FILE | sed 's/VERSION/'"$GIT_VERSION"'/'`
-      tar cpzf $DEPLOY_FILE nCine-external
+
+      if [ "$OS" != "emscripten" ]; then
+        tar cpzf $DEPLOY_FILE nCine-external
+      else
+         tar cpzf $DEPLOY_FILE nCine-external-emscripten
+      fi
 
       export DEPLOY_BRANCH=`echo $DEPLOY_BRANCH | sed 's/OS/'"$OS"'/'`
       export DEPLOY_BRANCH=`echo $DEPLOY_BRANCH | sed 's/COMPILER/'"$CC"'/'`

@@ -35,7 +35,7 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_directory ${EP_BASE}/Source/project_${TARGET_OPENAL}/include/AL ${FRAMEWORK_DIR_OPENAL}/Versions/A/Headers
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_OPENAL}/Headers
 	)
-else()
+elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_OPENAL}
 		URL ${URL_OPENAL}
 		URL_MD5 ${URL_MD5_OPENAL}
