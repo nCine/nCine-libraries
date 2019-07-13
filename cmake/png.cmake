@@ -38,9 +38,9 @@ if(MSVC)
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_NOEXT}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_NOEXT}.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_LIB} ${LIBDIR}/
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_PNG}/png.h ${INCDIR}/png.h
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_PNG}/pngconf.h ${INCDIR}/pngconf.h
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different pnglibconf.h ${INCDIR}/pnglibconf.h
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_PNG}/png.h ${INCDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_PNG}/pngconf.h ${INCDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different pnglibconf.h ${INCDIR}/
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_PNG ${DESTINATION_PATH}/${TARGET_PNG}.framework)

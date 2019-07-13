@@ -5,6 +5,7 @@ set(LIBNAME_WEBP libwebp)
 set(LIBNAME_WEBPDECODER libwebpdecoder)
 set(LIBNAME_WEBP_IMPLIB libwebp_dll) # for dynamic linking
 set(LIBNAME_WEBPDECODER_IMPLIB libwebpdecoder_dll) # for dynamic linking
+set(PROJECT_SRC_WEBP ${EP_BASE}/Source/project_${TARGET_WEBP})
 
 if(MSVC)
 	if(CMAKE_CL_64)
@@ -33,7 +34,7 @@ if(MSVC)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/bin/${LIBNAME_WEBPDECODER}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBP_IMPLIB}.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBPDECODER_IMPLIB}.lib ${LIBDIR}/
-			COMMAND ${CMAKE_COMMAND} -E copy_directory src/webp ${INCDIR}/webp
+			COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SRC_WEBP}/src/webp ${INCDIR}/webp
 			COMMAND ${CMAKE_COMMAND} -E remove ${INCDIR}/webp/config.h.in
 	)
 elseif(APPLE)
@@ -51,7 +52,7 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different src/.libs/${DYLIBNAME_WEBP} ${FRAMEWORK_DIR_WEBP}/Versions/A/
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/${DYLIBNAME_WEBP} ${FRAMEWORK_DIR_WEBP}/${TARGET_WEBP}
 			COMMAND install_name_tool -id "@rpath/${TARGET_WEBP}.framework/${TARGET_WEBP}" ${FRAMEWORK_DIR_WEBP}/${TARGET_WEBP}
-			COMMAND ${CMAKE_COMMAND} -E copy_directory src/webp ${FRAMEWORK_DIR_WEBP}/Versions/A/Headers/
+			COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SRC_WEBP}/src/webp ${FRAMEWORK_DIR_WEBP}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E remove ${FRAMEWORK_DIR_WEBP}/Versions/A/Headers/config.h.in
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_WEBP}/Headers
 	)

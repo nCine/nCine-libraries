@@ -17,11 +17,11 @@ if(MSVC)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/${CONFIGURATION}/lua.lib ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/${CONFIGURATION}/lua.exe ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/${CONFIGURATION}/luac.exe ${BINDIR}/
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lua.h ${INCDIR}/lua.h
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/luaconf.h ${INCDIR}/luaconf.h
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lualib.h ${INCDIR}/lualib.h
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lauxlib.h ${INCDIR}/lauxlib.h
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lua.hpp ${INCDIR}/lua.hpp
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lua.h ${INCDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/luaconf.h ${INCDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lualib.h ${INCDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lauxlib.h ${INCDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SRC_LUA}/src/lua.hpp ${INCDIR}/
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_LUA ${DESTINATION_PATH}/${TARGET_LUA}.framework)
