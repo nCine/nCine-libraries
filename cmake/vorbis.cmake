@@ -119,9 +119,9 @@ elseif(NOT EMSCRIPTEN)
 		DEPENDS project_${TARGET_OGG}
 		URL ${URL_VORBIS}
 		URL_MD5 ${URL_MD5_VORBIS}
-		CONFIGURE_COMMAND ./configure --with-ogg-libraries=${DESTINATION_PATH}/lib --with-ogg-includes=${DESTINATION_PATH}/include/ --prefix=# && make clean # clean to avoid libtool error
+		CONFIGURE_COMMAND ./configure --with-ogg-libraries=${DESTINATION_PATH}/lib --with-ogg-includes=${DESTINATION_PATH}/include/ --prefix=${DESTINATION_PATH} --exec-prefix=${DESTINATION_PATH}
 		BUILD_COMMAND ${PARALLEL_MAKE}
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND make DESTDIR=${DESTINATION_PATH} install
+		INSTALL_COMMAND make install
 	)
 endif()

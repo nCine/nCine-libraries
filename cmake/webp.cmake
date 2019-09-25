@@ -74,9 +74,9 @@ else()
 	ExternalProject_Add(project_${TARGET_WEBP}
 		URL ${URL_WEBP}
 		URL_MD5 ${URL_MD5_WEBP}
-		CONFIGURE_COMMAND ./configure --enable-shared=yes --enable-static=no --prefix=
+		CONFIGURE_COMMAND ./configure --enable-shared=yes --enable-static=no --prefix=${DESTINATION_PATH} --exec-prefix=${DESTINATION_PATH}
 		BUILD_COMMAND ${PARALLEL_MAKE}
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND make DESTDIR=${DESTINATION_PATH} install
+		INSTALL_COMMAND make install
 	)
 endif()

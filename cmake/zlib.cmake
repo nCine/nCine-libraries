@@ -61,7 +61,10 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_ZLIB}/zlib.h zlib.h # to build libpng
 	)
 elseif(NOT EMSCRIPTEN)
-	set(LIBNAME_ZLIB libz)
+	set(LIBNAME_ZLIB libz.so)
+	if(MINGW)
+		set(LIBNAME_ZLIB libzlib.dll.a)
+	endif()
 
 	ExternalProject_Add(project_${TARGET_ZLIB}
 		URL ${URL_ZLIB}

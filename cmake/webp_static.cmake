@@ -24,9 +24,9 @@ elseif(NOT APPLE AND NOT EMSCRIPTEN)
 		DEPENDS project_${TARGET_WEBP}
 		DOWNLOAD_COMMAND ""
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_WEBP}
-		CONFIGURE_COMMAND ./configure --enable-shared=no --enable-static=yes --prefix=
+		CONFIGURE_COMMAND ./configure --enable-shared=no --enable-static=yes --prefix=${DESTINATION_PATH} --exec-prefix=${DESTINATION_PATH}
 		BUILD_COMMAND make
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND make DESTDIR=${DESTINATION_PATH} install
+		INSTALL_COMMAND make install
 	)
 endif()

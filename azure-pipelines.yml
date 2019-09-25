@@ -125,7 +125,8 @@ jobs:
     env:
       MAPPED_GH_TOKEN: $(GH_TOKEN)
 
-- job: Windows
+- job: Windows_MinGW
+  displayName: Windows and MinGW
 
   strategy:
     matrix:
@@ -135,10 +136,40 @@ jobs:
       VS2019:
         imageName: 'windows-2019'
 
+      MinGW GCC:
+        imageName: 'vs2017-win2016'
+        Compiler: mingw64
+        CC: gcc
+        CXX: g++
+
+      MinGW Clang:
+        imageName: 'vs2017-win2016'
+        Compiler: mingw64
+        CC: clang
+        CXX: clang++
+
   pool:
     vmImage: $(imageName)
 
   steps:
+  - powershell: |
+      choco install --no-progress msys2 --params="/InstallDir:C:\msys64 /NoUpdate /NoPath"
+      C:\msys64\usr\bin\pacman --noconfirm -Syy
+
+    displayName: 'Install and Update MSYS2 on Windows'
+    condition: eq( variables['Compiler'], 'mingw64' )
+
+  - powershell: |
+      C:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-cmake make
+
+      if ($env:CC -eq "gcc") { C:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-gcc }
+      else { C:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-clang }
+
+      C:\msys64\usr\bin\pacman --noconfirm -Scc
+
+    displayName: 'Install Build Dependencies on MinGW'
+    condition: eq( variables['Compiler'], 'mingw64' )
+
   - powershell: |
       $env:generator = switch ("$(imageName)")
       {
@@ -147,12 +178,34 @@ jobs:
       }
       cmake -G "$env:generator" -A x64 -B ../nCine-libraries-build
 
-    displayName: 'CMake Configuration'
+    displayName: 'CMake Configuration on Windows'
+    condition: ne( variables['Compiler'], 'mingw64' )
+
+  - powershell: |
+      $env:PATH = "C:\msys64\usr\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem"
+      $env:MSYSTEM = "MINGW64"
+      C:\msys64\usr\bin\bash.exe -lc 'cmake -G \"MSYS Makefiles\" -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=Release'
+
+    displayName: 'CMake Configuration on MinGW'
+    condition: eq( variables['Compiler'], 'mingw64' )
+    env:
+      CHERE_INVOKING: on
 
   - powershell: |
       cmake --build ../nCine-libraries-build --config Release
 
-    displayName: 'CMake Build'
+    displayName: 'CMake Build on Windows'
+    condition: ne( variables['Compiler'], 'mingw64' )
+
+  - powershell: |
+      $env:PATH = "C:\msys64\usr\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem"
+      $env:MSYSTEM = "MINGW64"
+      C:\msys64\usr\bin\bash.exe -lc 'make -j2 -C ../nCine-libraries-build'
+
+    displayName: 'Make on MinGW'
+    condition: eq( variables['Compiler'], 'mingw64' )
+    env:
+      CHERE_INVOKING: on
 
   - powershell: |
       $env:GIT_REDIRECT_STDERR = '2>&1'
@@ -170,8 +223,16 @@ jobs:
       cd ..
 
       $env:DEPLOY_FILE = -join($env:DEPLOY_FILE_NOEXT, ".7z")
-      $env:DEPLOY_FILE = $env:DEPLOY_FILE -replace "OS","windows" -replace "COMPILER",$env:vsversion -replace "VERSION",$env:git_version
-      $env:DEPLOY_BRANCH = $env:DEPLOY_BRANCH -replace "OS","windows" -replace "COMPILER",$env:vsversion
+      if ($env:Compiler -ne "mingw64")
+      {
+        $env:DEPLOY_FILE = $env:DEPLOY_FILE -replace "OS","windows" -replace "COMPILER",$env:vsversion -replace "VERSION",$env:git_version
+        $env:DEPLOY_BRANCH = $env:DEPLOY_BRANCH -replace "OS","windows" -replace "COMPILER",$env:vsversion
+      }
+      else
+      {
+        $env:DEPLOY_FILE = $env:DEPLOY_FILE -replace "OS","mingw64" -replace "COMPILER",$env:CC -replace "VERSION",$env:git_version
+        $env:DEPLOY_BRANCH = $env:DEPLOY_BRANCH -replace "OS","mingw64" -replace "COMPILER",$env:CC
+      }
       7z a $env:DEPLOY_FILE nCine-external
 
       git clone https://$env:MAPPED_GH_TOKEN@github.com/nCine/nCine-libraries-artifacts.git 2>&1>$null

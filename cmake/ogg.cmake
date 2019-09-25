@@ -57,9 +57,9 @@ elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_OGG}
 		URL ${URL_OGG}
 		URL_MD5 ${URL_MD5_OGG}
-		CONFIGURE_COMMAND ./configure --prefix=
+		CONFIGURE_COMMAND ./configure --prefix=${DESTINATION_PATH} --exec-prefix=${DESTINATION_PATH}
 		BUILD_COMMAND ${PARALLEL_MAKE}
 		BUILD_IN_SOURCE 1
-		INSTALL_COMMAND make DESTDIR=${DESTINATION_PATH} install
+		INSTALL_COMMAND make install
 	)
 endif()

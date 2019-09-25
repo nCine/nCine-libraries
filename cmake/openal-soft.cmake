@@ -36,6 +36,11 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_OPENAL}/Headers
 	)
 elseif(NOT EMSCRIPTEN)
+	if(MINGW)
+		set(MINGW_INSTALL_COMMANDS
+			COMMAND ${CMAKE_COMMAND} -E rename ${DESTINATION_PATH}/lib/libOpenAL32.dll.a ${DESTINATION_PATH}/lib/libopenal.dll.a)
+	endif()
+
 	ExternalProject_Add(project_${TARGET_OPENAL}
 		URL ${URL_OPENAL}
 		URL_MD5 ${URL_MD5_OPENAL}
@@ -43,5 +48,6 @@ elseif(NOT EMSCRIPTEN)
 		BUILD_COMMAND ${PARALLEL_MAKE}
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND make install
+			${MINGW_INSTALL_COMMANDS}
 	)
 endif()
