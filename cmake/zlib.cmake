@@ -5,20 +5,15 @@ set(LIBNAME_ZLIB zlib)
 
 if(MSVC)
 	set(LIBNAME_ZLIB_LIB zlibstatic) # for static linking
-	if(MSVC_IDE)
-		set(LIBNAME_ZLIB_DLL $<$<NOT:$<CONFIG:Debug>>:zlib>$<$<CONFIG:Debug>:zlibd>)
-		set(LIBNAME_ZLIB_LIB $<$<NOT:$<CONFIG:Debug>>:zlibstatic>$<$<CONFIG:Debug>:zlibstaticd>)
-	else()
-		if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-			set(LIBNAME_ZLIB zlibd)
-			set(LIBNAME_ZLIB_LIB zlibstaticd)
-		endif()
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(LIBNAME_ZLIB zlibd)
+		set(LIBNAME_ZLIB_LIB zlibstaticd)
 	endif()
 
 	if(MSVC_IDE)
-		set(LIBFILE_ZLIB_DLL ${CONFIGURATION}/${LIBNAME_ZLIB_DLL}.dll)
-		set(LIBFILE_ZLIB_IMPLIB ${CONFIGURATION}/${LIBNAME_ZLIB_DLL}.lib)
-		set(LIBFILE_ZLIB_LIB ${CONFIGURATION}/${LIBNAME_ZLIB_LIB}.lib)
+		set(LIBFILE_ZLIB_DLL ${CMAKE_BUILD_TYPE}/${LIBNAME_ZLIB}.dll)
+		set(LIBFILE_ZLIB_IMPLIB ${CMAKE_BUILD_TYPE}/${LIBNAME_ZLIB}.lib)
+		set(LIBFILE_ZLIB_LIB ${CMAKE_BUILD_TYPE}/${LIBNAME_ZLIB_LIB}.lib)
 	else()
 		set(LIBFILE_ZLIB_DLL ${LIBNAME_ZLIB_DLL}.dll)
 		set(LIBFILE_ZLIB_IMPLIB ${LIBNAME_ZLIB_DLL}.lib)
@@ -28,7 +23,7 @@ if(MSVC)
 	ExternalProject_Add(project_${TARGET_ZLIB}
 		URL ${URL_ZLIB}
 		URL_MD5 ${URL_MD5_ZLIB}
-		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CONFIGURATION}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE}
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_DLL} ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_IMPLIB} ${LIBDIR}/

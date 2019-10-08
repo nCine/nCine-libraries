@@ -12,23 +12,49 @@ jobs:
 
   strategy:
     matrix:
-      Linux GCC:
+      Linux GCC Debug:
         imageName: 'ubuntu-16.04'
         CC: gcc
         CXX: g++
+        BuildType: Debug
 
-      Linux Clang:
+      Linux GCC Release:
+        imageName: 'ubuntu-16.04'
+        CC: gcc
+        CXX: g++
+        BuildType: Release
+
+      Linux Clang Debug:
         imageName: 'ubuntu-16.04'
         CC: clang
         CXX: clang++
+        BuildType: Debug
 
-      macOS:
+      Linux Clang Release:
+        imageName: 'ubuntu-16.04'
+        CC: clang
+        CXX: clang++
+        BuildType: Release
+
+      macOS Debug:
         imageName: 'macOS-10.14'
+        BuildType: Debug
 
-      Emscripten:
+      macOS Release:
+        imageName: 'macOS-10.14'
+        BuildType: Release
+
+      Emscripten Debug:
         imageName: 'ubuntu-16.04'
         OS: emscripten
         CC: emcc
+        BuildType: Debug
+
+      Emscripten Release:
+        imageName: 'ubuntu-16.04'
+        OS: emscripten
+        CC: emcc
+        BuildType: Release
 
   pool:
     vmImage: $(imageName)
@@ -61,14 +87,14 @@ jobs:
     condition: eq( variables['OS'], 'emscripten' )
 
   - script: |
-      cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=Release
+      cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=$(BuildType)
 
     displayName: 'CMake Configuration'
     condition: ne( variables['OS'], 'emscripten' )
 
   - script: |
       source ../emsdk/emsdk_env.sh
-      emcmake cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=Release
+      emcmake cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=$(BuildType)
 
     displayName: 'CMake Configuration for Emscripten'
     condition: eq( variables['OS'], 'emscripten' )
@@ -121,7 +147,7 @@ jobs:
       git push --force || git push --set-upstream origin $DEPLOY_BRANCH
 
     displayName: 'Push Artifacts'
-    condition: succeeded()
+    condition: and( succeeded(), eq( variables['BuildType'], 'Release' ) )
     env:
       MAPPED_GH_TOKEN: $(GH_TOKEN)
 
@@ -130,23 +156,49 @@ jobs:
 
   strategy:
     matrix:
-      VS2017:
+      VS2017 Debug:
         imageName: 'vs2017-win2016'
+        BuildType: Debug
 
-      VS2019:
+      VS2017 Release:
+        imageName: 'vs2017-win2016'
+        BuildType: Release
+
+      VS2019 Debug:
         imageName: 'windows-2019'
+        BuildType: Debug
 
-      MinGW GCC:
+      VS2019 Release:
+        imageName: 'windows-2019'
+        BuildType: Release
+
+      MinGW GCC Debug:
         imageName: 'vs2017-win2016'
         Compiler: mingw64
         CC: gcc
         CXX: g++
+        BuildType: Debug
 
-      MinGW Clang:
+      MinGW GCC Release:
+        imageName: 'vs2017-win2016'
+        Compiler: mingw64
+        CC: gcc
+        CXX: g++
+        BuildType: Release
+
+      MinGW Clang Debug:
         imageName: 'vs2017-win2016'
         Compiler: mingw64
         CC: clang
         CXX: clang++
+        BuildType: Debug
+
+      MinGW Clang Release:
+        imageName: 'vs2017-win2016'
+        Compiler: mingw64
+        CC: clang
+        CXX: clang++
+        BuildType: Release
 
   pool:
     vmImage: $(imageName)
@@ -184,7 +236,7 @@ jobs:
   - powershell: |
       $env:PATH = "C:\msys64\usr\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem"
       $env:MSYSTEM = "MINGW64"
-      C:\msys64\usr\bin\bash.exe -lc 'cmake -G \"MSYS Makefiles\" -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=Release'
+      C:\msys64\usr\bin\bash.exe -lc 'cmake -G \"MSYS Makefiles\" -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=$(BuildType)'
 
     displayName: 'CMake Configuration on MinGW'
     condition: eq( variables['Compiler'], 'mingw64' )
@@ -192,7 +244,7 @@ jobs:
       CHERE_INVOKING: on
 
   - powershell: |
-      cmake --build ../nCine-libraries-build --config Release
+      cmake --build ../nCine-libraries-build --config $(BuildType)
 
     displayName: 'CMake Build on Windows'
     condition: ne( variables['Compiler'], 'mingw64' )
@@ -246,6 +298,6 @@ jobs:
       git push --force; if (-not $?) { git push --set-upstream origin $env:DEPLOY_BRANCH }
 
     displayName: 'Push Artifacts'
-    condition: succeeded()
+    condition: and( succeeded(), eq( variables['BuildType'], 'Release' ) )
     env:
       MAPPED_GH_TOKEN: $(GH_TOKEN)

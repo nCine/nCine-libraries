@@ -3,24 +3,20 @@ set(URL_GLEW http://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.tg
 set(URL_MD5_GLEW b2ab12331033ddfaa50dc39345343980)
 
 if(MSVC)
-	if(MSVC_IDE)
-		set(LIBNAME_GLEW $<$<NOT:$<CONFIG:Debug>>:glew32>$<$<CONFIG:Debug>:glew32d>)
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(LIBNAME_GLEW glew32d)
 	else()
-		if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-			set(LIBNAME_GLEW glew32d)
-		else()
-			set(LIBNAME_GLEW glew32)
-		endif()
+		set(LIBNAME_GLEW glew32)
 	endif()
 
-	set(BINDIR_GLEW ${EP_BASE}/Source/project_${TARGET_GLEW}/bin/${CONFIGURATION}/${PLATFORM})
-	set(LIBDIR_GLEW ${EP_BASE}/Source/project_${TARGET_GLEW}/lib/${CONFIGURATION}/${PLATFORM})
+	set(BINDIR_GLEW ${EP_BASE}/Source/project_${TARGET_GLEW}/bin/${CMAKE_BUILD_TYPE}/${PLATFORM})
+	set(LIBDIR_GLEW ${EP_BASE}/Source/project_${TARGET_GLEW}/lib/${CMAKE_BUILD_TYPE}/${PLATFORM})
 
 	ExternalProject_Add(project_${TARGET_GLEW}
 		URL ${URL_GLEW}
 		URL_MD5 ${URL_MD5_GLEW}
 		CONFIGURE_COMMAND devenv build/vc12/glew.sln /Upgrade # TODO: Build with CMake
-		BUILD_COMMAND msbuild build/vc12/glew_shared.vcxproj /t:Build /p:Platform=${PLATFORM} /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+		BUILD_COMMAND msbuild build/vc12/glew_shared.vcxproj /t:Build /p:Platform=${PLATFORM} /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${BINDIR_GLEW}/${LIBNAME_GLEW}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBDIR_GLEW}/${LIBNAME_GLEW}.lib ${LIBDIR}/

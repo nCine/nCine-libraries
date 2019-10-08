@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8.12)
-
 project(nCine-libraries)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
@@ -14,8 +13,12 @@ endif()
 set(EP_BASE "${CMAKE_BINARY_DIR}/ExternalProjects")
 set_property(DIRECTORY PROPERTY "EP_BASE" ${EP_BASE})
 
-set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CONFIGURATION_TYPES Release)
+if(NOT DEFINED CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
+	set(CMAKE_BUILD_TYPE "Release")
+	message(STATUS "CMAKE_BUILD_TYPE set by default to: " ${CMAKE_BUILD_TYPE})
+else()
+	message(STATUS "CMAKE_BUILD_TYPE is: " ${CMAKE_BUILD_TYPE})
+endif()
 
 if(MSVC)
 	if(CMAKE_CL_64)
@@ -33,10 +36,6 @@ if(MSVC)
 	file(MAKE_DIRECTORY ${BINDIR})
 	file(MAKE_DIRECTORY ${LIBDIR})
 	file(MAKE_DIRECTORY ${INCDIR})
-
-	if(MSVC_IDE)
-		set(CONFIGURATION $<CONFIGURATION>)
-	endif()
 endif()
 
 include(ExternalProject)

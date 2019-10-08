@@ -11,7 +11,7 @@ set(TARGET_VORBISFILE vorbisfile)
 set(LIBNAME_VORBISFILE libvorbisfile)
 
 if(MSVC)
-	set(LIBFILE_VORBIS_NOEXT ${EP_BASE}/Source/project_${TARGET_VORBIS}/win32/VS2010/libvorbis/${PLATFORM}/${CONFIGURATION}/${LIBNAME_VORBIS})
+	set(LIBFILE_VORBIS_NOEXT ${EP_BASE}/Source/project_${TARGET_VORBIS}/win32/VS2010/libvorbis/${PLATFORM}/${CMAKE_BUILD_TYPE}/${LIBNAME_VORBIS})
 
 	get_filename_component(LIBDIR_OGG ${LIBFILE_OGG_NOEXT}.dll DIRECTORY)
 	set(INCLUDEDIR_OGG ${EP_BASE}/Source/project_${TARGET_OGG}/include)
@@ -21,7 +21,7 @@ if(MSVC)
 		URL_MD5 ${URL_MD5_VORBIS}
 		CONFIGURE_COMMAND devenv win32/VS2010/libvorbis/libvorbis_dynamic.vcxproj /Upgrade
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
-			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_dynamic.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_dynamic.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}.lib ${LIBDIR}/
@@ -35,12 +35,12 @@ if(MSVC)
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
 		CONFIGURE_COMMAND devenv win32/VS2010/libvorbis/libvorbis_static.vcxproj /Upgrade
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
-			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_static.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_static.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}_static.lib ${LIBDIR}/
 	)
 
-	set(LIBFILE_VORBISFILE_NOEXT ${EP_BASE}/Source/project_${TARGET_VORBIS}/win32/VS2010/libvorbisfile/${PLATFORM}/${CONFIGURATION}/${LIBNAME_VORBISFILE})
+	set(LIBFILE_VORBISFILE_NOEXT ${EP_BASE}/Source/project_${TARGET_VORBIS}/win32/VS2010/libvorbisfile/${PLATFORM}/${CMAKE_BUILD_TYPE}/${LIBNAME_VORBISFILE})
 
 	get_filename_component(LIBDIR_VORBIS ${LIBFILE_VORBIS_NOEXT}.dll DIRECTORY)
 	ExternalProject_Add(project_${TARGET_VORBISFILE}
@@ -49,7 +49,7 @@ if(MSVC)
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
 		CONFIGURE_COMMAND devenv win32/VS2010/libvorbisfile/libvorbisfile_dynamic.vcxproj /Upgrade
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG} /LIBPATH:${LIBDIR_VORBIS}
-			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_dynamic.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_dynamic.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.lib ${LIBDIR}/
@@ -62,7 +62,7 @@ if(MSVC)
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
 		CONFIGURE_COMMAND devenv win32/VS2010/libvorbisfile/libvorbisfile_static.vcxproj /Upgrade
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
-			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_static.vcxproj /t:Build /p:Configuration=${CONFIGURATION} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_static.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}_static.lib ${LIBDIR}/
 	)
