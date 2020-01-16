@@ -1,6 +1,6 @@
 set(TARGET_GLFW glfw)
-set(URL_GLFW https://github.com/glfw/glfw/releases/download/3.3/glfw-3.3.zip)
-set(URL_MD5_GLFW e4f3c4848710093f29b1781f2d1b7acc)
+set(URL_GLFW https://github.com/glfw/glfw/releases/download/3.3.1/glfw-3.3.1.zip)
+set(URL_MD5_GLFW af10b3441ef16754cf08c2295fe2506a)
 set(LIBNAME_GLFW glfw3)
 set(COMMON_CMAKE_ARGS_GLFW -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF)
 
