@@ -9,14 +9,17 @@ if(MSVC)
 		set(LIBNAME_GLEW glew32)
 	endif()
 
-	set(BINDIR_GLEW ${EP_BASE}/Source/project_${TARGET_GLEW}/bin/${CMAKE_BUILD_TYPE}/${PLATFORM})
-	set(LIBDIR_GLEW ${EP_BASE}/Source/project_${TARGET_GLEW}/lib/${CMAKE_BUILD_TYPE}/${PLATFORM})
+	set(BINDIR_GLEW ${EP_BASE}/Source/project_${TARGET_GLEW}/bin/${CMAKE_BUILD_TYPE})
+	set(LIBDIR_GLEW ${EP_BASE}/Source/project_${TARGET_GLEW}/lib/${CMAKE_BUILD_TYPE})
 
 	ExternalProject_Add(project_${TARGET_GLEW}
 		URL ${URL_GLEW}
 		URL_MD5 ${URL_MD5_GLEW}
-		CONFIGURE_COMMAND devenv build/vc12/glew.sln /Upgrade # TODO: Build with CMake
-		BUILD_COMMAND msbuild build/vc12/glew_shared.vcxproj /t:Build /p:Platform=${PLATFORM} /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+		PATCH_COMMAND ${CMAKE_COMMAND}
+			-D CMAKELISTS_TXT_FILE=${EP_BASE}/Source/project_${TARGET_GLEW}/build/cmake/CMakeLists.txt
+			-P ${CMAKE_SOURCE_DIR}/patches/glew_vs2019.cmake
+		CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch CMakeLists.txt COMMAND ${CMAKE_COMMAND} build/cmake -DBUILD_UTILS=OFF
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${BINDIR_GLEW}/${LIBNAME_GLEW}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBDIR_GLEW}/${LIBNAME_GLEW}.lib ${LIBDIR}/

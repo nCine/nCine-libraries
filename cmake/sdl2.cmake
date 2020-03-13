@@ -1,6 +1,6 @@
 set(TARGET_SDL2 sdl2)
-set(URL_SDL2 https://www.libsdl.org/release/SDL2-2.0.10.tar.gz)
-set(URL_MD5_SDL2 5a2114f2a6f348bdab5bf52b994811db)
+set(URL_SDL2 https://www.libsdl.org/release/SDL2-2.0.12.tar.gz)
+set(URL_MD5_SDL2 783b6f2df8ff02b19bb5ce492b99c8ff)
 set(LIBNAME_SDL2 SDL2)
 set(LIBNAME_SDL2MAIN SDL2main)
 
@@ -20,6 +20,9 @@ if(MSVC)
 		URL_MD5 ${URL_MD5_SDL2}
 		CMAKE_ARGS -DSDL_STATIC=OFF
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE}
+		PATCH_COMMAND ${CMAKE_COMMAND}
+			-D CMAKELISTS_TXT_FILE=${EP_BASE}/Source/project_${TARGET_SDL2}/CMakeLists.txt
+			-P ${CMAKE_SOURCE_DIR}/patches/sdl2_vs2019.cmake
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDL2_DLL} ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDL2_IMPLIB} ${LIBDIR}/
