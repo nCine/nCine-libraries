@@ -1,6 +1,6 @@
 set(TARGET_GLEW glew)
-set(URL_GLEW http://sourceforge.net/projects/glew/files/glew/2.1.0/glew-2.1.0.tgz/download)
-set(URL_MD5_GLEW b2ab12331033ddfaa50dc39345343980)
+set(URL_GLEW http://sourceforge.net/projects/glew/files/glew/2.2.0/glew-2.2.0.tgz/download)
+set(URL_MD5_GLEW 3579164bccaef09e36c0af7f4fd5c7c7)
 
 if(MSVC)
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -15,10 +15,7 @@ if(MSVC)
 	ExternalProject_Add(project_${TARGET_GLEW}
 		URL ${URL_GLEW}
 		URL_MD5 ${URL_MD5_GLEW}
-		PATCH_COMMAND ${CMAKE_COMMAND}
-			-D CMAKELISTS_TXT_FILE=${EP_BASE}/Source/project_${TARGET_GLEW}/build/cmake/CMakeLists.txt
-			-P ${CMAKE_SOURCE_DIR}/patches/glew_vs2019.cmake
-		CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch CMakeLists.txt COMMAND ${CMAKE_COMMAND} build/cmake -DBUILD_UTILS=OFF
+		CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch CMakeLists.txt COMMAND ${CMAKE_COMMAND} build/cmake -A ${CMAKE_GENERATOR_PLATFORM} -DBUILD_UTILS=OFF
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${BINDIR_GLEW}/${LIBNAME_GLEW}.dll ${BINDIR}/
