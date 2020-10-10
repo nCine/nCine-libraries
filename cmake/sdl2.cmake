@@ -55,10 +55,12 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/${DYLIBNAME_SDL2} ${FRAMEWORK_DIR_SDL2}/${TARGET_SDL2}
 			COMMAND install_name_tool -id "@rpath/${TARGET_SDL2}.framework/${TARGET_SDL2}" ${FRAMEWORK_DIR_SDL2}/${TARGET_SDL2}
 			COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/
-			COMMAND ${CMAKE_COMMAND} -E copy_directory ${EP_BASE}/Source/project_${TARGET_SDL2}/include ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/SDL_config.h ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers
-			COMMAND ${CMAKE_COMMAND} -E remove ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/SDL_config.h.cmake
-			COMMAND ${CMAKE_COMMAND} -E remove ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/SDL_config.h.in
+			COMMAND ${CMAKE_COMMAND} -E copy_directory ${EP_BASE}/Source/project_${TARGET_SDL2}/include ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/SDL2
+			# Copy SDL.h to the Headers directory for FindSDL2.cmake to work
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_SDL2}/include/SDL.h ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/SDL_config.h ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/SDL2
+			COMMAND ${CMAKE_COMMAND} -E remove ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/SDL2/SDL_config.h.cmake
+			COMMAND ${CMAKE_COMMAND} -E remove ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/SDL2/SDL_config.h.in
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_SDL2}/Headers
 			COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_SDL2}/Versions/A/Resources
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_SDL2}/Xcode/SDL/Info-Framework.plist ${FRAMEWORK_DIR_SDL2}/Versions/A/Resources/Info.plist

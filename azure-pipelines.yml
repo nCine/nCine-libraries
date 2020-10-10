@@ -212,7 +212,7 @@ jobs:
     condition: eq( variables['Compiler'], 'mingw64' )
 
   - powershell: |
-      C:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-cmake make
+      C:\msys64\usr\bin\pacman --noconfirm -S cmake
 
       if ($env:CC -eq "gcc") { C:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-gcc }
       else { C:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-clang }
