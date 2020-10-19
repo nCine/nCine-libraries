@@ -1,6 +1,6 @@
 set(TARGET_LUA lua)
-set(URL_LUA https://www.lua.org/ftp/lua-5.4.0.tar.gz)
-set(URL_MD5_LUA dbf155764e5d433fc55ae80ea7060b60)
+set(URL_LUA https://www.lua.org/ftp/lua-5.4.1.tar.gz)
+set(URL_MD5_LUA 1d575faef1c907292edd79e7a2784d30)
 set(LIBNAME_LUA lua)
 set(PROJECT_SRC_LUA ${EP_BASE}/Source/project_${TARGET_LUA})
 set(PROJECT_BUILD_LUA ${EP_BASE}/Build/project_${TARGET_LUA})
