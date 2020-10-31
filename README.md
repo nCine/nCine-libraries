@@ -1,3 +1,9 @@
+[![Linux](https://github.com/nCine/nCine-libraries/workflows/Linux/badge.svg)](https://github.com/nCine/nCine-libraries/actions?workflow=Linux)
+[![macOS](https://github.com/nCine/nCine-libraries/workflows/macOS/badge.svg)](https://github.com/nCine/nCine-libraries/actions?workflow=macOS)
+[![Windows](https://github.com/nCine/nCine-libraries/workflows/Windows/badge.svg)](https://github.com/nCine/nCine-libraries/actions?workflow=Windows)
+[![MinGW](https://github.com/nCine/nCine-libraries/workflows/MinGW/badge.svg)](https://github.com/nCine/nCine-libraries/actions?workflow=MinGW)
+[![Emscripten](https://github.com/nCine/nCine-libraries/workflows/Emscripten/badge.svg)](https://github.com/nCine/nCine-libraries/actions?workflow=Emscripten)
+
 # nCine-libraries
 CMake scripts to build nCine dependency libraries for MSVC and OS X
 
