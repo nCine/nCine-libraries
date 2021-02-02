@@ -25,7 +25,7 @@ elseif(NOT APPLE AND NOT EMSCRIPTEN)
 		DOWNLOAD_COMMAND ""
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_WEBP}
 		CONFIGURE_COMMAND ./configure --enable-shared=no --enable-static=yes --prefix=${DESTINATION_PATH} --exec-prefix=${DESTINATION_PATH}
-		BUILD_COMMAND make
+		BUILD_COMMAND make -j${CPUS}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND make install
 	)

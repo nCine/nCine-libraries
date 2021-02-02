@@ -10,7 +10,7 @@ if(MSVC)
 		URL ${URL_OGG}
 		URL_MD5 ${URL_MD5_OGG}
 		CONFIGURE_COMMAND devenv win32/VS2015/libogg_dynamic.vcxproj /Upgrade
-		BUILD_COMMAND msbuild win32/VS2015/libogg_dynamic.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+		BUILD_COMMAND msbuild win32/VS2015/libogg_dynamic.vcxproj -m /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}.lib ${LIBDIR}/
@@ -24,7 +24,7 @@ if(MSVC)
 		DOWNLOAD_COMMAND ""
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_OGG}
 		CONFIGURE_COMMAND devenv win32/VS2015/libogg_static.vcxproj /Upgrade
-		BUILD_COMMAND msbuild win32/VS2015/libogg_static.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+		BUILD_COMMAND msbuild win32/VS2015/libogg_static.vcxproj -m /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_OGG_NOEXT}_static.lib ${LIBDIR}/
 	)
@@ -36,7 +36,7 @@ elseif(APPLE)
 		URL ${URL_OGG}
 		URL_MD5 ${URL_MD5_OGG}
 		CONFIGURE_COMMAND ./configure --prefix=
-		BUILD_COMMAND ${PARALLEL_MAKE}
+		BUILD_COMMAND make -j${CPUS}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_OGG}/Versions/A
 			COMMAND ${CMAKE_COMMAND} -E create_symlink A ${FRAMEWORK_DIR_OGG}/Versions/Current
@@ -57,7 +57,7 @@ elseif(NOT EMSCRIPTEN)
 		URL ${URL_OGG}
 		URL_MD5 ${URL_MD5_OGG}
 		CONFIGURE_COMMAND ./configure --prefix=${DESTINATION_PATH} --exec-prefix=${DESTINATION_PATH}
-		BUILD_COMMAND ${PARALLEL_MAKE}
+		BUILD_COMMAND make -j${CPUS}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND make install
 	)

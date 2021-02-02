@@ -21,7 +21,7 @@ if(MSVC)
 		URL_MD5 ${URL_MD5_VORBIS}
 		CONFIGURE_COMMAND devenv win32/VS2010/libvorbis/libvorbis_dynamic.vcxproj /Upgrade
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
-			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_dynamic.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_dynamic.vcxproj -m /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}.lib ${LIBDIR}/
@@ -35,7 +35,7 @@ if(MSVC)
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
 		CONFIGURE_COMMAND devenv win32/VS2010/libvorbis/libvorbis_static.vcxproj /Upgrade
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
-			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_static.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+			COMMAND msbuild win32/VS2010/libvorbis/libvorbis_static.vcxproj -m /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBIS_NOEXT}_static.lib ${LIBDIR}/
 	)
@@ -49,7 +49,7 @@ if(MSVC)
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
 		CONFIGURE_COMMAND devenv win32/VS2010/libvorbisfile/libvorbisfile_dynamic.vcxproj /Upgrade
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG} /LIBPATH:${LIBDIR_VORBIS}
-			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_dynamic.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_dynamic.vcxproj -m /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}.lib ${LIBDIR}/
@@ -62,7 +62,7 @@ if(MSVC)
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
 		CONFIGURE_COMMAND devenv win32/VS2010/libvorbisfile/libvorbisfile_static.vcxproj /Upgrade
 		BUILD_COMMAND set CL=/I${INCLUDEDIR_OGG} COMMAND set LINK=/LIBPATH:${LIBDIR_OGG}
-			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_static.vcxproj /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
+			COMMAND msbuild win32/VS2010/libvorbisfile/libvorbisfile_static.vcxproj -m /t:Build /p:Configuration=${CMAKE_BUILD_TYPE} /p:Platform=${PLATFORM} /p:PlatformToolset=${CMAKE_VS_PLATFORM_TOOLSET} /p:WindowsTargetPlatformVersion=${CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_VORBISFILE_NOEXT}_static.lib ${LIBDIR}/
 	)
@@ -77,7 +77,7 @@ elseif(APPLE)
 		URL ${URL_VORBIS}
 		URL_MD5 ${URL_MD5_VORBIS}
 		CONFIGURE_COMMAND ./configure --with-ogg-libraries=${EP_BASE}/Source/project_${TARGET_OGG}/src/.libs/ --with-ogg-includes=${EP_BASE}/Source/project_${TARGET_OGG}/include/ --enable-oggtest=no --prefix=
-		BUILD_COMMAND ${PARALLEL_MAKE}
+		BUILD_COMMAND make -j${CPUS}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_VORBIS}/Versions/A
 			COMMAND ${CMAKE_COMMAND} -E create_symlink A ${FRAMEWORK_DIR_VORBIS}/Versions/Current
@@ -101,7 +101,7 @@ elseif(APPLE)
 		DOWNLOAD_COMMAND "" # Vorbis project is going to download the archive, but a dummy command is needed
 		SOURCE_DIR ${EP_BASE}/Source/project_${TARGET_VORBIS}
 		CONFIGURE_COMMAND ""
-		BUILD_COMMAND ""
+		BUILD_COMMAND make -j${CPUS}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_VORBISFILE}/Versions/A
 			COMMAND ${CMAKE_COMMAND} -E create_symlink A ${FRAMEWORK_DIR_VORBISFILE}/Versions/Current
@@ -120,7 +120,7 @@ elseif(NOT EMSCRIPTEN)
 		URL ${URL_VORBIS}
 		URL_MD5 ${URL_MD5_VORBIS}
 		CONFIGURE_COMMAND ./configure --with-ogg-libraries=${DESTINATION_PATH}/lib --with-ogg-includes=${DESTINATION_PATH}/include/ --prefix=${DESTINATION_PATH} --exec-prefix=${DESTINATION_PATH}
-		BUILD_COMMAND ${PARALLEL_MAKE}
+		BUILD_COMMAND make -j${CPUS}
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND make install
 	)

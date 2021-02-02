@@ -10,7 +10,7 @@ if(MSVC)
 		URL ${URL_LUA}
 		URL_MD5 ${URL_MD5_LUA}
 		PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/patches/CMakeLists_lua.txt ${PROJECT_SRC_LUA}/CMakeLists.txt
-		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel --config ${CMAKE_BUILD_TYPE}
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/${CMAKE_BUILD_TYPE}/lua54.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/${CMAKE_BUILD_TYPE}/lua54.lib ${LIBDIR}/
@@ -32,6 +32,7 @@ elseif(APPLE)
 		URL_MD5 ${URL_MD5_LUA}
 		PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/patches/CMakeLists_lua.txt ${PROJECT_SRC_LUA}/CMakeLists.txt
 		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_LUA}/Versions/A
 			COMMAND ${CMAKE_COMMAND} -E create_symlink A ${FRAMEWORK_DIR_LUA}/Versions/Current
@@ -58,6 +59,7 @@ elseif(EMSCRIPTEN)
 		PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/patches/CMakeLists_lua.txt ${PROJECT_SRC_LUA}/CMakeLists.txt
 		CMAKE_COMMAND emcmake ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR}
 		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/liblua.a ${DESTINATION_PATH}/lib/liblua.a
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/lua.js ${DESTINATION_PATH}/bin/lua.js
@@ -76,6 +78,7 @@ elseif(MINGW)
 		URL_MD5 ${URL_MD5_LUA}
 		PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/patches/CMakeLists_lua.txt ${PROJECT_SRC_LUA}/CMakeLists.txt
 		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/liblua54.dll ${DESTINATION_PATH}/bin/liblua54.dll
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/liblua54.dll.a ${DESTINATION_PATH}/lib/liblua54.dll.a
@@ -94,6 +97,7 @@ else()
 		URL_MD5 ${URL_MD5_LUA}
 		PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/patches/CMakeLists_lua.txt ${PROJECT_SRC_LUA}/CMakeLists.txt
 		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/liblua5.4.so ${DESTINATION_PATH}/lib/liblua5.4.so
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/liblua.a ${DESTINATION_PATH}/lib/liblua.a
