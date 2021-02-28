@@ -1,6 +1,6 @@
 set(TARGET_OPENAL openal)
-set(URL_OPENAL https://github.com/kcat/openal-soft/archive/openal-soft-1.21.0.tar.gz)
-set(URL_MD5_OPENAL 4962fc6592040bb0dbd8f4702e8ab7de)
+set(URL_OPENAL https://github.com/kcat/openal-soft/archive/1.21.1.tar.gz)
+set(URL_MD5_OPENAL a4922a79526c590b6cac0c10f3f1bef8)
 set(COMMON_CMAKE_ARGS_OPENAL -DALSOFT_UTILS=OFF -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF -DALSOFT_CONFIG=OFF)
 
 if(MSVC)
@@ -19,7 +19,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_OPENAL ${DESTINATION_PATH}/${TARGET_OPENAL}.framework)
-	set(DYLIBNAME_OPENAL libopenal.1.21.0.dylib)
+	set(DYLIBNAME_OPENAL libopenal.1.21.1.dylib)
 
 	ExternalProject_Add(project_${TARGET_OPENAL}
 		URL ${URL_OPENAL}
