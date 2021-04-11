@@ -1,6 +1,6 @@
 set(TARGET_LUA lua)
-set(URL_LUA https://www.lua.org/ftp/lua-5.4.2.tar.gz)
-set(URL_MD5_LUA 49c92d6a49faba342c35c52e1ac3f81e)
+set(URL_LUA https://www.lua.org/ftp/lua-5.4.3.tar.gz)
+set(URL_MD5_LUA ef63ed2ecfb713646a7fcc583cf5f352)
 set(LIBNAME_LUA lua)
 set(PROJECT_SRC_LUA ${EP_BASE}/Source/project_${TARGET_LUA})
 set(PROJECT_BUILD_LUA ${EP_BASE}/Build/project_${TARGET_LUA})
@@ -10,7 +10,7 @@ if(MSVC)
 		URL ${URL_LUA}
 		URL_MD5 ${URL_MD5_LUA}
 		PATCH_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/patches/CMakeLists_lua.txt ${PROJECT_SRC_LUA}/CMakeLists.txt
-		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel --config ${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE} --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/${CMAKE_BUILD_TYPE}/lua54.dll ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/${CMAKE_BUILD_TYPE}/lua54.lib ${LIBDIR}/

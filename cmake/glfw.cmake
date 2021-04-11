@@ -1,6 +1,6 @@
 set(TARGET_GLFW glfw)
-set(URL_GLFW https://github.com/glfw/glfw/releases/download/3.3.3/glfw-3.3.3.zip)
-set(URL_MD5_GLFW 6f02ecacf5b62545fbb281e56cdbd163)
+set(URL_GLFW https://github.com/glfw/glfw/releases/download/3.3.4/glfw-3.3.4.zip)
+set(URL_MD5_GLFW 7cd3b5db36dc8c644871de51f478882f)
 set(LIBNAME_GLFW glfw3)
 set(COMMON_CMAKE_ARGS_GLFW -DBUILD_SHARED_LIBS=ON -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF)
 
@@ -19,7 +19,7 @@ if(MSVC)
 		URL ${URL_GLFW}
 		URL_MD5 ${URL_MD5_GLFW}
 		CMAKE_ARGS ${COMMON_CMAKE_ARGS_GLFW} -DGLFW_INSTALL=OFF
-		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel --config ${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE} --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_GLFW} ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_GLFW_IMPLIB} ${LIBDIR}/

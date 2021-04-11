@@ -19,7 +19,7 @@ if(MSVC)
 		URL ${URL_SDL2}
 		URL_MD5 ${URL_MD5_SDL2}
 		CMAKE_ARGS -DSDL_STATIC=OFF
-		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel --config ${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE} --parallel
 		PATCH_COMMAND ${CMAKE_COMMAND}
 			-D CMAKELISTS_TXT_FILE=${EP_BASE}/Source/project_${TARGET_SDL2}/CMakeLists.txt
 			-P ${CMAKE_SOURCE_DIR}/patches/sdl2_vs2019.cmake

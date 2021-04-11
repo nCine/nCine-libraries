@@ -23,7 +23,7 @@ if(MSVC)
 	ExternalProject_Add(project_${TARGET_ZLIB}
 		URL ${URL_ZLIB}
 		URL_MD5 ${URL_MD5_ZLIB}
-		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel --config ${CMAKE_BUILD_TYPE}
+		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE} --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_DLL} ${BINDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_IMPLIB} ${LIBDIR}/
