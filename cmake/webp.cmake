@@ -22,7 +22,7 @@ if(MSVC)
 		set(LIBNAME_WEBP_IMPLIB libwebp_debug_dll)
 		set(LIBNAME_WEBPDECODER_IMPLIB libwebpdecoder_debug_dll)
 	endif()
-	set(OBJDIR_WEBP ${EP_BASE}/Source/project_${TARGET_WEBP}/${CONFIG_WEBP}/${PLATFORM})
+	set(OBJDIR_WEBP ${EP_BASE}/Source/project_${TARGET_WEBP}/${CONFIG_WEBP}/${CMAKE_VS_PLATFORM_NAME})
 
 	ExternalProject_Add(project_${TARGET_WEBP}
 		URL ${URL_WEBP}

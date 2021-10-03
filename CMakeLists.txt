@@ -22,12 +22,10 @@ endif()
 
 if(MSVC)
 	if(CMAKE_CL_64)
-		set(PLATFORM x64)
 		set(BINDIR "${DESTINATION_PATH}/bin/x64")
 		set(LIBDIR "${DESTINATION_PATH}/lib/x64")
 
 	else()
-		set(PLATFORM Win32)
 		set(BINDIR "${DESTINATION_PATH}/bin/x86")
 		set(LIBDIR "${DESTINATION_PATH}/lib/x86")
 	endif()

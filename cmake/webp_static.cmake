@@ -7,7 +7,7 @@ if(MSVC)
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		set(CONFIG_WEBP debug-static)
 	endif()
-	set(OBJDIR_WEBP ${EP_BASE}/Source/project_${TARGET_WEBP}/${CONFIG_WEBP}/${PLATFORM})
+	set(OBJDIR_WEBP ${EP_BASE}/Source/project_${TARGET_WEBP}/${CONFIG_WEBP}/${CMAKE_VS_PLATFORM_NAME})
 
 	ExternalProject_Add(project_${TARGET_WEBP_STATIC}
 		DEPENDS project_${TARGET_WEBP}
