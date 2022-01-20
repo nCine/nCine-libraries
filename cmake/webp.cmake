@@ -1,6 +1,6 @@
 set(TARGET_WEBP webp)
-set(URL_WEBP http://downloads.webmproject.org/releases/webp/libwebp-1.1.0.tar.gz)
-set(URL_MD5_WEBP 7e047f2cbaf584dff7a8a7e0f8572f18)
+set(URL_WEBP http://downloads.webmproject.org/releases/webp/libwebp-1.2.2.tar.gz)
+set(URL_MD5_WEBP b5e2e414a8adee4c25fe56b18dd9c549)
 set(LIBNAME_WEBP libwebp)
 set(LIBNAME_WEBPDECODER libwebpdecoder)
 set(LIBNAME_WEBP_IMPLIB libwebp_dll) # for dynamic linking
