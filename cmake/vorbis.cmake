@@ -84,7 +84,7 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different lib/.libs/${DYLIBNAME_VORBIS} ${FRAMEWORK_DIR_VORBIS}/Versions/A/
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/${DYLIBNAME_VORBIS} ${FRAMEWORK_DIR_VORBIS}/${TARGET_VORBIS}
 			COMMAND install_name_tool -id "@rpath/${TARGET_VORBIS}.framework/${TARGET_VORBIS}" ${FRAMEWORK_DIR_VORBIS}/${TARGET_VORBIS}
-			COMMAND install_name_tool -change "/lib/${DYLIBNAME_OGG}" "@rpath/${TARGET_OGG}.framework/${TARGET_OGG}" ${FRAMEWORK_DIR_VORBIS}/${TARGET_VORBIS}
+			COMMAND sh -c "install_name_tool -change $(otool -L ${FRAMEWORK_DIR_VORBIS}/${TARGET_VORBIS} | grep ${DYLIBNAME_OGG} | cut -f2 | cut -d \" \" -f1) \"@rpath/${TARGET_OGG}.framework/${TARGET_OGG}\" ${FRAMEWORK_DIR_VORBIS}/${TARGET_VORBIS}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_VORBIS}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/codec.h ${FRAMEWORK_DIR_VORBIS}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/vorbisenc.h ${FRAMEWORK_DIR_VORBIS}/Versions/A/Headers/
@@ -108,8 +108,8 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different lib/.libs/${DYLIBNAME_VORBISFILE} ${FRAMEWORK_DIR_VORBISFILE}/Versions/A/
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/${DYLIBNAME_VORBISFILE} ${FRAMEWORK_DIR_VORBISFILE}/${TARGET_VORBISFILE}
 			COMMAND install_name_tool -id "@rpath/${TARGET_VORBISFILE}.framework/${TARGET_VORBISFILE}" ${FRAMEWORK_DIR_VORBISFILE}/${TARGET_VORBISFILE}
-			COMMAND install_name_tool -change "/lib/${DYLIBNAME_VORBIS}" "@rpath/${TARGET_VORBIS}.framework/${TARGET_VORBIS}" ${FRAMEWORK_DIR_VORBISFILE}/${TARGET_VORBISFILE}
-			COMMAND install_name_tool -change "/lib/${DYLIBNAME_OGG}" "@rpath/${TARGET_OGG}.framework/${TARGET_OGG}" ${FRAMEWORK_DIR_VORBISFILE}/${TARGET_VORBISFILE}
+			COMMAND sh -c "install_name_tool -change $(otool -L ${FRAMEWORK_DIR_VORBISFILE}/${TARGET_VORBISFILE} | grep ${DYLIBNAME_VORBIS} | cut -f2 | cut -d ' ' -f1) \"@rpath/${TARGET_VORBIS}.framework/${TARGET_VORBIS}\" ${FRAMEWORK_DIR_VORBISFILE}/${TARGET_VORBISFILE}"
+			COMMAND sh -c "install_name_tool -change $(otool -L ${FRAMEWORK_DIR_VORBISFILE}/${TARGET_VORBISFILE} | grep ${DYLIBNAME_OGG} | cut -f2 | cut -d ' ' -f1) \"@rpath/${TARGET_OGG}.framework/${TARGET_OGG}\" ${FRAMEWORK_DIR_VORBISFILE}/${TARGET_VORBISFILE}"
 			COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_VORBISFILE}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different include/vorbis/vorbisfile.h ${FRAMEWORK_DIR_VORBISFILE}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_VORBISFILE}/Headers
