@@ -1,6 +1,6 @@
 set(TARGET_OPENAL openal)
-set(URL_OPENAL https://github.com/kcat/openal-soft/archive/1.21.1.tar.gz)
-set(URL_MD5_OPENAL a4922a79526c590b6cac0c10f3f1bef8)
+set(URL_OPENAL https://github.com/kcat/openal-soft/archive/1.22.0.tar.gz)
+set(URL_MD5_OPENAL 2118a424d048bfe6f4635603379f830e)
 set(COMMON_CMAKE_ARGS_OPENAL -DALSOFT_UTILS=OFF -DALSOFT_EXAMPLES=OFF -DALSOFT_TESTS=OFF -DALSOFT_INSTALL_CONFIG=OFF)
 
 if(MSVC)
@@ -19,7 +19,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_OPENAL ${DESTINATION_PATH}/${TARGET_OPENAL}.framework)
-	set(DYLIBNAME_OPENAL libopenal.1.21.1.dylib)
+	set(DYLIBNAME_OPENAL libopenal.1.22.0.dylib)
 
 	ExternalProject_Add(project_${TARGET_OPENAL}
 		URL ${URL_OPENAL}
@@ -38,6 +38,7 @@ elseif(APPLE)
 	)
 elseif(NOT EMSCRIPTEN)
 	if(MINGW)
+		set(MINGW_PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/patches/openal-soft_mingw.patch)
 		set(MINGW_INSTALL_COMMANDS
 			COMMAND ${CMAKE_COMMAND} -E rename ${DESTINATION_PATH}/lib/libOpenAL32.dll.a ${DESTINATION_PATH}/lib/libopenal.dll.a)
 	endif()
@@ -45,6 +46,7 @@ elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_OPENAL}
 		URL ${URL_OPENAL}
 		URL_MD5 ${URL_MD5_OPENAL}
+		PATCH_COMMAND ${MINGW_PATCH_COMMAND}
 		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${COMMON_CMAKE_ARGS_OPENAL} -DCMAKE_INSTALL_PREFIX=${DESTINATION_PATH}
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0

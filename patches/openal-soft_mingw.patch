@@ -1,0 +1,11 @@
+diff -urN openal-soft-1.22.0.orig/common/alstring.h openal-soft-1.22.0/common/alstring.h
+--- openal-soft-1.22.0.orig/common/alstring.h	2022-04-23 03:46:14.000000000 +0200
++++ openal-soft-1.22.0/common/alstring.h	2022-04-25 16:52:42.166627500 +0200
+@@ -2,6 +2,7 @@
+ #define AL_STRING_H
+ 
+ #include <cstddef>
++#include <cstring>
+ 
+ 
+ namespace al {
