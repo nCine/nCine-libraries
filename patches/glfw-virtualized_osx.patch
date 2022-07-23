@@ -1,6 +1,6 @@
-diff -urN glfw-3.3.7.orig/src/nsgl_context.m glfw-3.3.7/src/nsgl_context.m
---- glfw-3.3.7.orig/src/nsgl_context.m	2022-03-20 16:03:55.000000000 +0100
-+++ glfw-3.3.7/src/nsgl_context.m	2022-04-06 01:11:18.689104365 +0200
+diff -urN glfw-3.3.8.orig/src/nsgl_context.m glfw-3.3.8/src/nsgl_context.m
+--- glfw-3.3.8.orig/src/nsgl_context.m	2022-07-15 00:11:23.000000000 +0200
++++ glfw-3.3.8/src/nsgl_context.m	2022-07-23 13:40:14.898683623 +0200
 @@ -205,7 +205,6 @@
      NSOpenGLPixelFormatAttribute attribs[40];
      int index = 0;
