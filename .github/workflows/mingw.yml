@@ -38,19 +38,23 @@ jobs:
     - name: 'Checkout code'
       uses: actions/checkout@v2
 
-    - name: 'Install and Update MSYS2 on Windows'
+    - name: 'Update MSYS2 on Windows'
       run: |
-        choco install --no-progress msys2 --params="/InstallDir:C:\msys64 /NoUpdate /NoPath"
-        C:\msys64\usr\bin\pacman --noconfirm -Syy
+        $env:MSYSTEM = "MINGW64"
+
+        C:\msys64\usr\bin\bash.exe -lc 'pacman --noconfirm -Syyuu'
+        C:\msys64\usr\bin\bash.exe -lc 'pacman --noconfirm -Syyuu'
 
     - name: 'Install Build Dependencies'
       run: |
-        C:\msys64\usr\bin\pacman --noconfirm -S cmake
+        $env:MSYSTEM = "MINGW64"
 
-        if ("${{ matrix.CC }}" -eq "gcc") { C:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-gcc }
-        else { C:\msys64\usr\bin\pacman --noconfirm -S mingw-w64-x86_64-clang }
+        C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S cmake'
 
-        C:\msys64\usr\bin\pacman --noconfirm -Scc
+        if ("${{ matrix.CC }}" -eq "gcc") { C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-gcc' }
+        else { C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-clang' }
+
+        C:\msys64\usr\bin\bash.exe -lc 'pacman --noconfirm -Scc'
 
     - name: 'CMake Configuration'
       env:
@@ -59,7 +63,6 @@ jobs:
         $env:CC = "${{ matrix.CC }}"
         $env:CXX= "${{ matrix.CXX }}"
 
-        $env:PATH = "C:\msys64\usr\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem"
         $env:MSYSTEM = "MINGW64"
         C:\msys64\usr\bin\bash.exe -lc 'cmake -G \"MSYS Makefiles\" -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=${{ matrix.BuildType }}'
 
@@ -67,7 +70,6 @@ jobs:
       env:
         CHERE_INVOKING: on
       run: |
-        $env:PATH = "C:\msys64\usr\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem"
         $env:MSYSTEM = "MINGW64"
         C:\msys64\usr\bin\bash.exe -lc 'make -j2 -C ../nCine-libraries-build'
 

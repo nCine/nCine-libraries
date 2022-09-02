@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         BuildType: [Debug, Release]
-    runs-on: 'macOS-10.15'
+    runs-on: 'macOS-11'
 
     steps:
     - name: 'Checkout code'
