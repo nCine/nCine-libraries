@@ -62,6 +62,7 @@ elseif(EMSCRIPTEN)
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/liblua.a ${DESTINATION_PATH}/lib/liblua.a
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/liblua-mt.a ${DESTINATION_PATH}/lib/liblua-mt.a
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/lua.js ${DESTINATION_PATH}/bin/lua.js
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/lua.wasm ${DESTINATION_PATH}/bin/lua.wasm
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PROJECT_BUILD_LUA}/luac.js ${DESTINATION_PATH}/bin/luac.js
