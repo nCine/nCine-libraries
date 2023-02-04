@@ -2,6 +2,7 @@ set(TARGET_WEBP_STATIC webp_static)
 
 if(MSVC)
 	set(LIBNAME_WEBP_LIB libwebp) # for static linking
+	set(LIBNAME_SHARPYUV_LIB sharpyuv) # for static linking
 
 	set(CONFIG_WEBP release-static)
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -17,6 +18,7 @@ if(MSVC)
 		BUILD_COMMAND nmake /f Makefile.vc ARCH=${ARCH_WEBP} CFG=${CONFIG_WEBP} OBJDIR=.
 		BUILD_IN_SOURCE 1
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_WEBP}.lib ${LIBDIR}/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OBJDIR_WEBP}/lib/${LIBNAME_SHARPYUV}.lib ${LIBDIR}/
 	)
 # Supporting only frameworks on OS X
 elseif(NOT APPLE AND NOT EMSCRIPTEN)
