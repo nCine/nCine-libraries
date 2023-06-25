@@ -1,6 +1,6 @@
 set(TARGET_SDL2 sdl2)
-set(URL_SDL2 https://www.libsdl.org/release/SDL2-2.24.0.tar.gz)
-set(URL_MD5_SDL2 cf539ffe9e0dd6f943ac9de75fd2e56e)
+set(URL_SDL2 https://www.libsdl.org/release/SDL2-2.28.0.tar.gz)
+set(URL_MD5_SDL2 f7e53a08a706999ceb033bb911fe3c6e)
 set(LIBNAME_SDL2 SDL2)
 set(LIBNAME_SDL2MAIN SDL2main)
 
@@ -28,7 +28,7 @@ if(MSVC)
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDL2_IMPLIB} ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_SDL2MAIN} ${LIBDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_directory ${EP_BASE}/Source/project_${TARGET_SDL2}/include ${INCDIR}/SDL2
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different include-config-$<LOWER_CASE:$<CONFIG>>/SDL_config.h ${INCDIR}/SDL2/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different include-config-$<LOWER_CASE:$<CONFIG>>/SDL2/SDL_config.h ${INCDIR}/SDL2/
 			COMMAND ${CMAKE_COMMAND} -E remove ${INCDIR}/SDL2/SDL_config.h.cmake
 			COMMAND ${CMAKE_COMMAND} -E remove ${INCDIR}/SDL2/SDL_config.h.in
 	)
@@ -57,7 +57,7 @@ elseif(APPLE)
 			COMMAND install_name_tool -id "@rpath/${TARGET_SDL2}.framework/${TARGET_SDL2}" ${FRAMEWORK_DIR_SDL2}/${TARGET_SDL2}
 			COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E copy_directory ${EP_BASE}/Source/project_${TARGET_SDL2}/include ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different include-config-$<LOWER_CASE:$<CONFIG>>/SDL_config.h ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different include-config-$<LOWER_CASE:$<CONFIG>>/SDL2/SDL_config.h ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/
 			COMMAND ${CMAKE_COMMAND} -E remove ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/SDL2/SDL_config.h.cmake
 			COMMAND ${CMAKE_COMMAND} -E remove ${FRAMEWORK_DIR_SDL2}/Versions/A/Headers/SDL2/SDL_config.h.in
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Headers ${FRAMEWORK_DIR_SDL2}/Headers
