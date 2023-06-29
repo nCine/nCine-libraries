@@ -1,6 +1,6 @@
 set(TARGET_WEBP webp)
-set(URL_WEBP http://downloads.webmproject.org/releases/webp/libwebp-1.3.0.tar.gz)
-set(URL_MD5_WEBP 994cf2efb664ef5140fa0b56b83fa721)
+set(URL_WEBP http://downloads.webmproject.org/releases/webp/libwebp-1.3.1.tar.gz)
+set(URL_MD5_WEBP 0ff59e5598753f47519e3e61c12f8cfd)
 set(LIBNAME_WEBP libwebp)
 set(LIBNAME_SHARPYUV libsharpyuv)
 set(LIBNAME_WEBPDECODER libwebpdecoder)
