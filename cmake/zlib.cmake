@@ -1,6 +1,6 @@
 set(TARGET_ZLIB zlib)
-set(URL_ZLIB https://www.zlib.net/zlib-1.2.13.tar.gz)
-set(URL_MD5_ZLIB 9b8aa094c4e5765dabf4da391f00d15c)
+set(URL_ZLIB https://www.zlib.net/zlib-1.3.tar.gz)
+set(URL_MD5_ZLIB 60373b133d630f74f4a1f94c1185a53f)
 set(LIBNAME_ZLIB zlib)
 
 if(MSVC)
@@ -35,7 +35,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_ZLIB ${DESTINATION_PATH}/${TARGET_ZLIB}.framework)
-	set(DYLIBNAME_ZLIB libz.1.2.13.dylib)
+	set(DYLIBNAME_ZLIB libz.1.3.dylib)
 
 	ExternalProject_Add(project_${TARGET_ZLIB}
 		URL ${URL_ZLIB}
