@@ -3,10 +3,10 @@ if(NOT DEFINED TARGET_ZLIB)
 endif()
 
 set(TARGET_PNG png)
-set(URL_PNG http://downloads.sourceforge.net/project/libpng/libpng16/1.6.40/libpng-1.6.40.tar.gz)
-set(URL_MD5_PNG ec4b597c3a9b1f8d2826575f530367b7)
+set(URL_PNG http://downloads.sourceforge.net/project/libpng/libpng16/1.6.41/libpng-1.6.41.tar.gz)
+set(URL_MD5_PNG f64507ba698c2dca1f10b202698f62b5)
 set(LIBNAME_PNG libpng16)
-set(COMMON_CMAKE_ARGS_PNG -DPNG_BUILD_ZLIB=ON -DPNG_TESTS=OFF)
+set(COMMON_CMAKE_ARGS_PNG -DZLIB_ROOT=${BUILDDIR_ZLIB} -DPNG_TESTS=OFF)
 set(BUILDDIR_ZLIB ${EP_BASE}/Build/project_${TARGET_ZLIB})
 
 if(MSVC)
@@ -28,7 +28,7 @@ if(MSVC)
 		DEPENDS project_${TARGET_ZLIB}
 		URL ${URL_PNG}
 		URL_MD5 ${URL_MD5_PNG}
-		CMAKE_ARGS -DZLIB_LIBRARIES=${BUILDDIR_ZLIB}/${LIBFILE_ZLIB_IMPLIB} -DZLIB_INCLUDE_DIRS=${BUILDDIR_ZLIB} ${COMMON_CMAKE_ARGS_PNG} -DSKIP_INSTALL_ALL=1
+		CMAKE_ARGS -DZLIB_LIBRARY=${BUILDDIR_ZLIB}/${LIBFILE_ZLIB_IMPLIB} -DZLIB_INCLUDE_DIR=${BUILDDIR_ZLIB} ${COMMON_CMAKE_ARGS_PNG} -DSKIP_INSTALL_ALL=1
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE} --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_PNG_NOEXT}.dll ${BINDIR}/
@@ -41,9 +41,9 @@ if(MSVC)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_PNG ${DESTINATION_PATH}/${TARGET_PNG}.framework)
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-		set(DYLIBNAME_PNG libpng16d.16.40.0.dylib)
+		set(DYLIBNAME_PNG libpng16d.16.41.0.dylib)
 	else()
-		set(DYLIBNAME_PNG libpng16.16.40.0.dylib)
+		set(DYLIBNAME_PNG libpng16.16.41.0.dylib)
 	endif()
 
 	ExternalProject_Add(project_${TARGET_PNG}
