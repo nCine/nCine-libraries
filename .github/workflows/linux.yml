@@ -41,7 +41,7 @@ jobs:
     - name: 'Install Build Dependencies'
       run: |
         sudo apt-get update
-        sudo apt-get install -y libgl1-mesa-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libasound2-dev libpulse-dev
+        sudo apt-get install -y libwayland-dev libgl1-mesa-dev libxkbcommon-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libasound2-dev libpulse-dev
 
     - name: 'CMake Configuration'
       run: |

@@ -1,11 +1,11 @@
-diff -urN glfw-3.3.9.orig/src/nsgl_context.m glfw-3.3.9/src/nsgl_context.m
---- glfw-3.3.9.orig/src/nsgl_context.m	2023-12-12 19:00:27.000000000 +0100
-+++ glfw-3.3.9/src/nsgl_context.m	2023-12-15 10:48:59.379514051 +0100
+diff -urN glfw-3.4.orig/src/nsgl_context.m glfw-3.4/src/nsgl_context.m
+--- glfw-3.4.orig/src/nsgl_context.m	2024-02-23 11:45:32.000000000 -0800
++++ glfw-3.4/src/nsgl_context.m	2024-03-10 11:47:31.000000000 -0700
 @@ -204,7 +204,6 @@
      NSOpenGLPixelFormatAttribute attribs[40];
      int index = 0;
  
--    addAttrib(NSOpenGLPFAAccelerated);
-     addAttrib(NSOpenGLPFAClosestPolicy);
+-    ADD_ATTRIB(NSOpenGLPFAAccelerated);
+     ADD_ATTRIB(NSOpenGLPFAClosestPolicy);
  
      if (ctxconfig->nsgl.offline)
