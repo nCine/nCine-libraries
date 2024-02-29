@@ -16,11 +16,11 @@ jobs:
       fail-fast: false
       matrix:
         BuildType: [Debug, Release]
-    runs-on: 'macOS-11'
+    runs-on: 'macOS-12'
 
     steps:
     - name: 'Checkout code'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'CMake Configuration'
       run: |

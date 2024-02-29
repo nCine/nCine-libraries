@@ -36,7 +36,7 @@ jobs:
 
     steps:
     - name: 'Checkout code'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Update MSYS2 on Windows'
       run: |
@@ -49,7 +49,7 @@ jobs:
       run: |
         $env:MSYSTEM = "MINGW64"
 
-        C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S cmake'
+        C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-cmake'
 
         if ("${{ matrix.CC }}" -eq "gcc") { C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-gcc' }
         else { C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-clang' }
@@ -64,7 +64,7 @@ jobs:
         $env:CXX= "${{ matrix.CXX }}"
 
         $env:MSYSTEM = "MINGW64"
-        C:\msys64\usr\bin\bash.exe -lc 'cmake -G \"MSYS Makefiles\" -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=${{ matrix.BuildType }}'
+        C:\msys64\usr\bin\bash.exe -lc "cmake -G 'MSYS Makefiles' -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=${{ matrix.BuildType }}"
 
     - name: 'Make'
       env:
