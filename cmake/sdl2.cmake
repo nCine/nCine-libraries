@@ -1,10 +1,15 @@
 set(TARGET_SDL2 sdl2)
-set(URL_SDL2 https://www.libsdl.org/release/SDL2-2.30.0.tar.gz)
-set(URL_MD5_SDL2 3b0a35e1d794382dcd64d9da93870ea1)
+set(URL_SDL2 https://www.libsdl.org/release/SDL2-2.30.4.tar.gz)
+set(URL_MD5_SDL2 89166c920ab657476bf80f6112cd7028)
 set(LIBNAME_SDL2 SDL2)
 set(LIBNAME_SDL2MAIN SDL2main)
 
 if(MSVC)
+	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+		set(LIBNAME_SDL2 SDL2d)
+		set(LIBNAME_SDL2MAIN SDL2maind)
+	endif()
+
 	if(MSVC_IDE)
 		set(LIBFILE_SDL2_DLL ${CMAKE_BUILD_TYPE}/${LIBNAME_SDL2}.dll)
 		set(LIBFILE_SDL2_IMPLIB ${CMAKE_BUILD_TYPE}/${LIBNAME_SDL2}.lib)
@@ -66,14 +71,9 @@ elseif(APPLE)
 			COMMAND ${CMAKE_COMMAND} -E create_symlink Versions/Current/Resources ${FRAMEWORK_DIR_SDL2}/Resources
 	)
 elseif(NOT EMSCRIPTEN)
-	if(MINGW)
-		set(MINGW_PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/patches/sdl2_mingw.patch)
-	endif()
-
 	ExternalProject_Add(project_${TARGET_SDL2}
 		URL ${URL_SDL2}
 		URL_MD5 ${URL_MD5_SDL2}
-		PATCH_COMMAND ${MINGW_PATCH_COMMAND}
 		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${DESTINATION_PATH}
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0
