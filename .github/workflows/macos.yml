@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macOS-12, macOS-14]
+        os: [macOS-13, macOS-14]
         BuildType: [Debug, Release]
 
     runs-on: ${{ matrix.os }}
@@ -27,10 +27,10 @@ jobs:
     - name: 'CMake Configuration'
       run: |
         if [[ "${{ matrix.os }}" == "macOS-14" ]]; then
-          export OSX_ARCHITECTURES="arm64;x86_64"
+          export OSX_ARCHITECTURES='"arm64;x86_64"'
         fi
 
-        cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=${{ matrix.BuildType }} -D CMAKE_OSX_ARCHITECTURES=$OSX_ARCHITECTURES
+        cmake -B ../nCine-libraries-build -D CMAKE_BUILD_TYPE=${{ matrix.BuildType }} #-D CMAKE_OSX_ARCHITECTURES=$OSX_ARCHITECTURES
 
     - name: 'Make'
       run: |
@@ -50,7 +50,7 @@ jobs:
         if [[ "${{ matrix.os }}" == "macOS-14" ]]; then
           export OS=macos14
         else
-          export OS=macos12
+          export OS=macos13
         fi
         export CC=appleclang
 
