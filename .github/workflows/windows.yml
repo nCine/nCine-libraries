@@ -31,7 +31,12 @@ jobs:
           "windows-2022" {"Visual Studio 17 2022"}
           "windows-2019" {"Visual Studio 16 2019"}
         }
-        cmake -G "$env:generator" -A x64 -B ../nCine-libraries-build
+
+        if ("${{ matrix.os }}" -eq "windows-2019")
+          # VS 2019 does not support C11 atomics, that are needed to build Box2D v3.x
+          { cmake -G "$env:generator" -A x64 -B ../nCine-libraries-build -D BUILD_BOX2D=OFF }
+        else
+          { cmake -G "$env:generator" -A x64 -B ../nCine-libraries-build }
 
     - name: 'CMake Build'
       run: |
