@@ -5,7 +5,7 @@ endif()
 set(TARGET_VORBIS vorbis)
 set(URL_VORBIS http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz)
 set(URL_MD5_VORBIS 9b8034da6edc1a17d18b9bc4542015c7)
-set(COMMON_CMAKE_ARGS_VORBIS -DBUILD_SHARED_LIBS=ON)
+set(COMMON_CMAKE_ARGS_VORBIS -DBUILD_SHARED_LIBS=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5)
 set(INCLUDE_DIR_VORBIS ${EP_BASE}/Source/project_${TARGET_VORBIS}/include)
 set(TARGET_VORBISFILE vorbisfile)
 
@@ -16,7 +16,6 @@ if(MSVC)
 	set(LIBFILE_VORBISFILE_NOEXT lib/${CMAKE_BUILD_TYPE}/${LIBNAME_VORBISFILE})
 
 	get_filename_component(LIBDIR_OGG ${LIBFILE_OGG_NOEXT}.dll DIRECTORY)
-	set(INCLUDEDIR_OGG ${EP_BASE}/Source/project_${TARGET_OGG}/include)
 	ExternalProject_Add(project_${TARGET_VORBIS}
 		DEPENDS project_${TARGET_OGG}
 		URL ${URL_VORBIS}
