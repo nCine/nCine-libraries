@@ -5,12 +5,17 @@
 [![Emscripten](https://github.com/nCine/nCine-libraries/workflows/Emscripten/badge.svg)](https://github.com/nCine/nCine-libraries/actions?workflow=Emscripten)
 
 # nCine-libraries
-CMake scripts to build nCine dependency libraries for MSVC and OS X
+
+CMake scripts to build nCine dependency libraries for Linux, macOS, MSVC, MinGW, and Emscripten.
 
 ## Information
-This repository contains the scripts to easily compile the libraries needed by the nCine when building on Windows using MSVC or when building frameworks on OS X.
+
+This repository contains the scripts to easily compile the libraries needed by the nCine on all supported platforms (except for Android).
+
+It also contains some additional libraries that can optionally be used in nCine projects.
 
 ### Libraries
+
 - libwebp
 - zlib
 - libpng
@@ -21,16 +26,19 @@ This repository contains the scripts to easily compile the libraries needed by t
 - libvorbis
 - OpenAL-soft
 - Lua
+- Box2D
+- libcurl
 
 ## Build
+
 To compile the libraries on Windows:
 
-```
-"%programfiles%/CMake/bin/cmake.exe" -HnCine-libraries -BnCine-libraries-build
+```bash
+"%programfiles%/CMake/bin/cmake.exe" -S nCine-libraries -B nCine-libraries-build
 ```
 
-To compile the libraries on OS X:
+To compile the libraries on macOS:
 
-```
-/Applications/CMake/Contents/bin/cmake -HnCine-libraries -BnCine-libraries-build
+```bash
+/Applications/CMake/Contents/bin/cmake -S nCine-libraries -B nCine-libraries-build
 ```

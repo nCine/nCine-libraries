@@ -1,0 +1,12 @@
+diff -urN box2d-3.1.0.orig/src/CMakeLists.txt box2d-3.1.0/src/CMakeLists.txt
+--- box2d-3.1.0.orig/src/CMakeLists.txt	2025-04-20 06:12:49.000000000 +0200
++++ box2d-3.1.0/src/CMakeLists.txt	2025-04-27 20:20:25.270710946 +0200
+@@ -163,7 +163,7 @@
+ 	target_compile_options(box2d PRIVATE -Wmissing-prototypes -Wall -Wextra -pedantic -Werror)
+ elseif (EMSCRIPTEN)
+ 	message(STATUS "Box2D on Emscripten")
+-	if (BOX2D_DISABLE_SIMD OFF)
++	if (NOT BOX2D_DISABLE_SIMD)
+ 		target_compile_options(box2d PRIVATE -msimd128 -msse2)
+ 	endif()
+ elseif (UNIX)
