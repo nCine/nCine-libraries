@@ -1,0 +1,55 @@
+diff -urN libwebp-1.5.0.orig/CMakeLists.txt libwebp-1.5.0/CMakeLists.txt
+--- libwebp-1.5.0.orig/CMakeLists.txt	2024-12-20 02:17:50.000000000 +0100
++++ libwebp-1.5.0/CMakeLists.txt	2025-06-09 12:13:03.024687701 +0200
+@@ -699,9 +699,8 @@
+   else()
+     set(emscripten_stack_size "-sTOTAL_STACK=5MB")
+   endif()
+-  find_package(SDL2 REQUIRED)
+   # wasm2js does not support SIMD.
+-  if(NOT WEBP_ENABLE_SIMD)
++  if(FALSE AND NOT WEBP_ENABLE_SIMD)
+     # JavaScript version
+     add_executable(webp_js ${CMAKE_CURRENT_SOURCE_DIR}/extras/webp_to_sdl.c)
+     target_link_libraries(webp_js webpdecoder SDL2)
+@@ -722,22 +721,24 @@
+     target_compile_definitions(webp_js PUBLIC EMSCRIPTEN WEBP_HAVE_SDL)
+   endif()
+ 
+-  # WASM version
+-  add_executable(webp_wasm ${CMAKE_CURRENT_SOURCE_DIR}/extras/webp_to_sdl.c)
+-  target_link_libraries(webp_wasm webpdecoder SDL2)
+-  target_include_directories(webp_wasm PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+-  set_target_properties(
+-    webp_wasm
+-    PROPERTIES
+-      # Emscripten puts -sUSE_SDL2=1 in this variable, though it's needed at
+-      # compile time to ensure the headers are downloaded.
+-      COMPILE_OPTIONS "${SDL2_LIBRARIES}"
+-      LINK_FLAGS
+-      "-sWASM=1 ${emscripten_stack_size} \
+-       -sEXPORTED_FUNCTIONS=_WebPToSDL -sINVOKE_RUN=0 \
+-       -sEXPORTED_RUNTIME_METHODS=cwrap ${SDL2_LIBRARIES} \
+-       -sALLOW_MEMORY_GROWTH")
+-  target_compile_definitions(webp_wasm PUBLIC EMSCRIPTEN WEBP_HAVE_SDL)
++  if(FALSE)
++    # WASM version
++    add_executable(webp_wasm ${CMAKE_CURRENT_SOURCE_DIR}/extras/webp_to_sdl.c)
++    target_link_libraries(webp_wasm webpdecoder SDL2)
++    target_include_directories(webp_wasm PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
++    set_target_properties(
++      webp_wasm
++      PROPERTIES
++        # Emscripten puts -sUSE_SDL2=1 in this variable, though it's needed at
++        # compile time to ensure the headers are downloaded.
++        COMPILE_OPTIONS "${SDL2_LIBRARIES}"
++        LINK_FLAGS
++        "-sWASM=1 ${emscripten_stack_size} \
++        -sEXPORTED_FUNCTIONS=_WebPToSDL -sINVOKE_RUN=0 \
++        -sEXPORTED_RUNTIME_METHODS=cwrap ${SDL2_LIBRARIES} \
++        -sALLOW_MEMORY_GROWTH")
++    target_compile_definitions(webp_wasm PUBLIC EMSCRIPTEN WEBP_HAVE_SDL)
++  endif()
+ 
+   target_compile_definitions(webpdspdecode PUBLIC EMSCRIPTEN)
+ endif()
