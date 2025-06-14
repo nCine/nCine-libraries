@@ -15,10 +15,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2019, windows-2022]
         BuildType: [Debug, Release]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: 'windows-2022'
 
     steps:
     - name: 'Checkout code'
@@ -26,21 +25,11 @@ jobs:
 
     - name: 'CMake Configuration'
       run: |
-        $env:generator = switch ("${{ matrix.os }}")
-        {
-          "windows-2022" {"Visual Studio 17 2022"}
-          "windows-2019" {"Visual Studio 16 2019"}
-        }
-
-        if ("${{ matrix.os }}" -eq "windows-2019")
-          # VS 2019 does not support C11 atomics, that are needed to build Box2D v3.x
-          { cmake -G "$env:generator" -A x64 -B ../nCine-libraries-build -D BUILD_BOX2D=OFF }
-        else
-          { cmake -G "$env:generator" -A x64 -B ../nCine-libraries-build }
+        cmake -G "Visual Studio 17 2022" -A x64 -B ../nCine-libraries-build
 
     - name: 'CMake Build'
       run: |
-        cmake --build ../nCine-libraries-build --config ${{ matrix.BuildType }}
+        cmake --build ../nCine-libraries-build --config ${{ matrix.BuildType }} -j $env:NUMBER_OF_PROCESSORS
 
     - name: 'Push Artifacts'
       if: matrix.BuildType == 'Release'
@@ -54,19 +43,13 @@ jobs:
         $env:branch_name = git describe --tags --exact-match; if (-not $?) { $env:branch_name = git symbolic-ref -q --short HEAD }; if (-not $?) { $env:branch_name = git rev-parse --short HEAD }
         $env:DEPLOY_MESSAGE = $env:DEPLOY_MESSAGE -replace "BRANCH_NAME",$env:branch_name
 
-        $env:vsversion = switch ("${{ matrix.os }}")
-        {
-          "windows-2022" {"vs2022"}
-          "windows-2019" {"vs2019"}
-        }
-
         git fetch --unshallow; if (-not $?) { return }
         git describe --tags --long 2>$null; if ($?) { $env:git_version = git describe --tags --long 2>$null | %{$_ -replace "([^-]*-g)","r`$1" -replace "-","."} } else { $env:git_version = -join("r", $(git rev-list --count HEAD), ".", $(git rev-parse --short HEAD)) }
         cd ..
 
         $env:DEPLOY_FILE = -join($env:DEPLOY_FILE_NOEXT, ".7z")
-        $env:DEPLOY_FILE = $env:DEPLOY_FILE -replace "OS","windows" -replace "COMPILER",$env:vsversion -replace "VERSION",$env:git_version
-        $env:DEPLOY_BRANCH = $env:DEPLOY_BRANCH -replace "OS","windows" -replace "COMPILER",$env:vsversion
+        $env:DEPLOY_FILE = $env:DEPLOY_FILE -replace "OS","windows" -replace "COMPILER","vs2022" -replace "VERSION",$env:git_version
+        $env:DEPLOY_BRANCH = $env:DEPLOY_BRANCH -replace "OS","windows" -replace "COMPILER","vs2022"
         7z a $env:DEPLOY_FILE nCine-external
 
         git clone https://$env:PUBLIC_REPO_TOKEN@github.com/nCine/nCine-libraries-artifacts.git 2>&1>$null

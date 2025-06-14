@@ -17,7 +17,7 @@ jobs:
       matrix:
         BuildType: [Debug, Release]
 
-    runs-on: 'ubuntu-22.04'
+    runs-on: 'ubuntu-24.04'
 
     steps:
     - name: 'Checkout code'
@@ -39,7 +39,7 @@ jobs:
     - name: 'Make'
       run: |
         source ../emsdk/emsdk_env.sh
-        make -j2 -C ../nCine-libraries-build
+        make -j $(getconf _NPROCESSORS_ONLN) -C ../nCine-libraries-build
 
     - name: 'Push Artifacts'
       if: matrix.BuildType == 'Release'

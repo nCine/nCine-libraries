@@ -32,7 +32,7 @@ jobs:
           CC: clang
           CXX: clang++
 
-    runs-on: 'windows-2019'
+    runs-on: 'windows-2022'
 
     steps:
     - name: 'Checkout code'
@@ -49,7 +49,7 @@ jobs:
       run: |
         $env:MSYSTEM = "MINGW64"
 
-        C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-cmake'
+        C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-cmake make patch'
 
         if ("${{ matrix.CC }}" -eq "gcc") { C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-gcc' }
         else { C:\msys64\usr\bin\bash.exe -lc 'pacman --needed --noconfirm -S mingw-w64-x86_64-clang' }
@@ -71,7 +71,7 @@ jobs:
         CHERE_INVOKING: on
       run: |
         $env:MSYSTEM = "MINGW64"
-        C:\msys64\usr\bin\bash.exe -lc 'make -j2 -C ../nCine-libraries-build'
+        C:\msys64\usr\bin\bash.exe -lc 'make -j $NUMBER_OF_PROCESSORS -C ../nCine-libraries-build'
 
     - name: 'Push Artifacts'
       if: matrix.BuildType == 'Release'
