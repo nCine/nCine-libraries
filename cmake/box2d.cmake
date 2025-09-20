@@ -1,6 +1,6 @@
 set(TARGET_BOX2D box2d)
-set(URL_BOX2D https://github.com/erincatto/box2d/archive/v3.1.0.tar.gz)
-set(URL_MD5_BOX2D 27cab62d601491bea48cba545e3e3b24)
+set(URL_BOX2D https://github.com/erincatto/box2d/archive/v3.1.1.tar.gz)
+set(URL_MD5_BOX2D d73952c02f83dfcb708badb1c5e63909)
 set(COMMON_CMAKE_ARGS_BOX2D -DBOX2D_SAMPLES=OFF -DBOX2D_UNIT_TESTS=OFF -DBOX2D_DOCS=OFF)
 set(PROJECT_SRC_BOX2D ${EP_BASE}/Source/project_${TARGET_BOX2D})
 set(PROJECT_BUILD_BOX2D ${EP_BASE}/Build/project_${TARGET_BOX2D})
@@ -20,7 +20,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_BOX2D ${DESTINATION_PATH}/${TARGET_BOX2D}.framework)
-	set(DYLIBNAME_VERSION_BOX2D 3.1.0)
+	set(DYLIBNAME_VERSION_BOX2D 3.1.1)
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 		set(DYLIBNAME_BOX2D libbox2dd.${DYLIBNAME_VERSION_BOX2D}.dylib)
 	else()
@@ -52,7 +52,6 @@ elseif(EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_BOX2D}
 		URL ${URL_BOX2D}
 		URL_MD5 ${URL_MD5_BOX2D}
-		PATCH_COMMAND patch -p1 < ${CMAKE_SOURCE_DIR}/patches/box2d-emscripten.patch
 		CMAKE_COMMAND emcmake ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR}
 		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} ${COMMON_CMAKE_ARGS_BOX2D} -DBUILD_SHARED_LIBS=OFF
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel

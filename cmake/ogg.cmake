@@ -1,6 +1,6 @@
 set(TARGET_OGG ogg)
-set(URL_OGG http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.gz)
-set(URL_MD5_OGG 3267127fe8d7ba77d3e00cb9d7ad578d)
+set(URL_OGG http://downloads.xiph.org/releases/ogg/libogg-1.3.6.tar.gz)
+set(URL_MD5_OGG e2ab08345a440d32e88b2156cf499eb9)
 set(COMMON_CMAKE_ARGS_OGG -DBUILD_SHARED_LIBS=ON -DINSTALL_DOCS=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5)
 set(INCLUDE_DIR_OGG ${EP_BASE}/Source/project_${TARGET_OGG}/include)
 
@@ -23,7 +23,7 @@ if(MSVC)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_OGG ${DESTINATION_PATH}/${TARGET_OGG}.framework)
 	set(DYLIBNAME_OGG libogg.0.dylib)
-	set(DYLIBNAME_VERSIONED_OGG libogg.0.8.5.dylib)
+	set(DYLIBNAME_VERSIONED_OGG libogg.0.8.6.dylib)
 
 	ExternalProject_Add(project_${TARGET_OGG}
 		URL ${URL_OGG}

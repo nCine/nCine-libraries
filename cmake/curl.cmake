@@ -1,6 +1,6 @@
 set(TARGET_CURL curl)
-set(URL_CURL https://curl.se/download/curl-8.14.1.tar.gz)
-set(URL_MD5_CURL 745dfc1da8c44eb9ce6ede16fd102c32)
+set(URL_CURL https://curl.se/download/curl-8.16.0.tar.gz)
+set(URL_MD5_CURL 3db9de72cc8f04166fa02d3173ac78bb)
 set(COMMON_CMAKE_ARGS_CURL -DHTTP_ONLY=ON -DCURL_USE_LIBPSL=OFF -DBUILD_CURL_EXE=OFF -DBUILD_LIBCURL_DOCS=OFF)
 
 if(MSVC)
