@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 3.12)
+
+project(RGFW C)
+
+file(COPY RGFW.h DESTINATION .)
+file(RENAME ${CMAKE_BINARY_DIR}/RGFW.h ${CMAKE_BINARY_DIR}/RGFW.c)
+
+add_library(librgfw_static STATIC ${CMAKE_BINARY_DIR}/RGFW.c)
+set_target_properties(librgfw_static PROPERTIES OUTPUT_NAME "RGFW")
+target_compile_definitions(librgfw_static PRIVATE RGFW_IMPLEMENTATION)
+
+if(NOT EMSCRIPTEN)
+	add_library(librgfw SHARED ${CMAKE_BINARY_DIR}/RGFW.c)
+	set_target_properties(librgfw PROPERTIES OUTPUT_NAME "RGFW")
+	target_compile_definitions(librgfw PRIVATE RGFW_IMPLEMENTATION)
+endif()
+
+if(WIN32)
+	set_target_properties(librgfw PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+	if (MSVC)
+		set_target_properties(librgfw PROPERTIES ARCHIVE_OUTPUT_NAME "RGFW.dll")
+	endif()
+elseif(APPLE)
+	target_compile_definitions(librgfw_static PRIVATE GL_SILENCE_DEPRECATION)
+	target_compile_definitions(librgfw PRIVATE GL_SILENCE_DEPRECATION)
+	target_link_libraries(librgfw_static "-framework CoreVideo -framework Cocoa -framework OpenGL -framework IOKit")
+	target_link_libraries(librgfw "-framework CoreVideo -framework Cocoa -framework OpenGL -framework IOKit")
+elseif(EMSCRIPTEN)
+	target_link_options(librgfw_static PRIVATE "SHELL:-s WASM=1 -s ASYNCIFY -s GL_SUPPORT_EXPLICIT_SWAP_CONTROL=1 -s FULL_ES3 FULL_ES2 USE_WEBGL2")
+elseif(NOT WIN32)
+	target_link_libraries(librgfw Xrandr X11 dl pthread)
+	target_link_libraries(librgfw_static Xrandr X11 dl pthread)
+endif()
