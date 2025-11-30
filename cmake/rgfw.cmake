@@ -1,6 +1,6 @@
 set(TARGET_RGFW rgfw)
-set(URL_RGFW https://github.com/ColleagueRiley/RGFW/archive/refs/tags/1.8.0-pre.zip)
-set(URL_MD5_RGFW 11af4e27cffdb8258e17306c374ea0c4)
+set(URL_RGFW https://github.com/ColleagueRiley/RGFW/archive/refs/tags/1.8.1.zip)
+set(URL_MD5_RGFW f9578656409afc2e3a7cb3450c7daf56)
 set(PROJECT_SRC_RGFW ${EP_BASE}/Source/project_${TARGET_RGFW})
 set(PROJECT_BUILD_RGFW ${EP_BASE}/Build/project_${TARGET_RGFW})
 
