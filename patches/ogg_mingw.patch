@@ -1,0 +1,12 @@
+diff -urN libogg-1.3.6.orig/win32/ogg.def libogg-1.3.6/win32/ogg.def
+--- libogg-1.3.6.orig/win32/ogg.def	2025-06-16 18:02:12.000000000 +0200
++++ libogg-1.3.6/win32/ogg.def	2025-12-31 19:40:34.331645800 +0100
+@@ -2,7 +2,7 @@
+ ; ogg.def
+ ; List of exported functions for Windows builds.
+ ;
+-LIBRARY ogg
++LIBRARY libogg
+ EXPORTS
+ ;
+ oggpack_writeinit
