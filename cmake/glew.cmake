@@ -1,6 +1,6 @@
 set(TARGET_GLEW glew)
-set(URL_GLEW http://sourceforge.net/projects/glew/files/glew/2.3.0/glew-2.3.0.tgz/download)
-set(URL_MD5_GLEW 1b321240e1f6651175e953b46bccb3f2)
+set(URL_GLEW http://sourceforge.net/projects/glew/files/glew/2.3.1/glew-2.3.1.tgz/download)
+set(URL_MD5_GLEW 923ac4437518cc7cd323adde8a4091ae)
 set(COMMON_CMAKE_ARGS_GLEW -DBUILD_UTILS=OFF)
 
 if(MSVC)
