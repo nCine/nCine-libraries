@@ -1,13 +1,15 @@
 set(TARGET_ZLIB zlib)
-set(URL_ZLIB https://www.zlib.net/zlib-1.3.1.tar.gz)
-set(URL_MD5_ZLIB 9855b6d802d7fe5b7bd5b196a2271655)
+set(URL_ZLIB https://www.zlib.net/zlib-1.3.2.tar.gz)
+set(URL_MD5_ZLIB a1e6c958597af3c67d162995a342138a)
 set(LIBNAME_ZLIB zlib)
+set(COMMON_CMAKE_ARGS_ZLIB -DZLIB_BUILD_TESTING=OFF)
 
 if(MSVC)
-	set(LIBNAME_ZLIB_LIB zlibstatic) # for static linking
+	set(LIBNAME_ZLIB z)
+	set(LIBNAME_ZLIB_LIB zs) # for static linking
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-		set(LIBNAME_ZLIB zlibd)
-		set(LIBNAME_ZLIB_LIB zlibstaticd)
+		set(LIBNAME_ZLIB zd)
+		set(LIBNAME_ZLIB_LIB zsd) # for static linking
 	endif()
 
 	if(MSVC_IDE)
@@ -23,11 +25,12 @@ if(MSVC)
 	ExternalProject_Add(project_${TARGET_ZLIB}
 		URL ${URL_ZLIB}
 		URL_MD5 ${URL_MD5_ZLIB}
+		CMAKE_ARGS ${COMMON_CMAKE_ARGS_ZLIB}
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE} --parallel
 		BUILD_IN_SOURCE 0
-		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_DLL} ${BINDIR}/
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_IMPLIB} ${LIBDIR}/
-			COMMAND "" #${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_LIB} ${LIBDIR}/
+		INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_DLL} ${BINDIR}/${LIBNAME_ZLIB}.dll
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_IMPLIB} ${LIBDIR}/${LIBNAME_ZLIB}.lib
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBFILE_ZLIB_LIB} ${LIBDIR}/${LIBNAME_ZLIB_LIB}.lib
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${EP_BASE}/Source/project_${TARGET_ZLIB}/zlib.h ${INCDIR}/
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different zconf.h ${INCDIR}/
 
@@ -35,12 +38,12 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_ZLIB ${DESTINATION_PATH}/${TARGET_ZLIB}.framework)
-	set(DYLIBNAME_ZLIB libz.1.3.1.dylib)
+	set(DYLIBNAME_ZLIB libz.1.3.2.dylib)
 
 	ExternalProject_Add(project_${TARGET_ZLIB}
 		URL ${URL_ZLIB}
 		URL_MD5 ${URL_MD5_ZLIB}
-		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_MACOSX_RPATH=ON
+		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_MACOSX_RPATH=ON ${COMMON_CMAKE_ARGS_ZLIB}
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORK_DIR_ZLIB}/Versions/A
@@ -59,7 +62,7 @@ elseif(NOT EMSCRIPTEN)
 	ExternalProject_Add(project_${TARGET_ZLIB}
 		URL ${URL_ZLIB}
 		URL_MD5 ${URL_MD5_ZLIB}
-		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${DESTINATION_PATH}
+		CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DCMAKE_INSTALL_PREFIX=${DESTINATION_PATH} ${COMMON_CMAKE_ARGS_ZLIB}
 		BUILD_COMMAND ${CMAKE_COMMAND} --build . --parallel
 		BUILD_IN_SOURCE 0
 		INSTALL_COMMAND make install
