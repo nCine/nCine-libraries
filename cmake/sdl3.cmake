@@ -1,6 +1,6 @@
 set(TARGET_SDL3 sdl3)
-set(URL_SDL3 https://github.com/libsdl-org/SDL/archive/refs/tags/release-3.4.12.tar.gz)
-set(URL_MD5_SDL3 30e75c2ca6fe03dfcac8fc6d0b4b6f13)
+set(URL_SDL3 https://github.com/libsdl-org/SDL/archive/refs/tags/release-3.4.14.tar.gz)
+set(URL_MD5_SDL3 1865d6f19cf4a35f9a9869e3824517eb)
 set(LIBNAME_SDL3 SDL3)
 set(COMMON_CMAKE_ARGS_SDL3 -DSDL_AUDIO=OFF -DSDL_CAMERA=OFF -DSDL_DUMMYVIDEO=OFF -DSDL_EXAMPLES=OFF -DSDL_OFFSCREEN=OFF -DSDL_POWER=OFF -DSDL_RENDER=OFF -DSDL_SENSOR=OFF -DSDL_TESTS=OFF)
 
