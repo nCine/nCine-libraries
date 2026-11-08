@@ -1,15 +1,15 @@
 set(TARGET_ZLIB zlib)
-set(URL_ZLIB https://www.zlib.net/zlib-1.3.2.tar.gz)
-set(URL_MD5_ZLIB a1e6c958597af3c67d162995a342138a)
+set(URL_ZLIB https://www.zlib.net/zlib-1.4.tar.gz)
+set(URL_MD5_ZLIB 5fdf67d2dbb1a155593ef68a32197df6)
 set(LIBNAME_ZLIB zlib)
 set(COMMON_CMAKE_ARGS_ZLIB -DZLIB_BUILD_TESTING=OFF)
 
 if(MSVC)
-	set(LIBNAME_ZLIB z)
-	set(LIBNAME_ZLIB_LIB zs) # for static linking
+	set(LIBNAME_ZLIB libz)
+	set(LIBNAME_ZLIB_LIB libzs) # for static linking
 	if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-		set(LIBNAME_ZLIB zd)
-		set(LIBNAME_ZLIB_LIB zsd) # for static linking
+		set(LIBNAME_ZLIB libzd)
+		set(LIBNAME_ZLIB_LIB libzsd) # for static linking
 	endif()
 
 	if(MSVC_IDE)
@@ -17,8 +17,8 @@ if(MSVC)
 		set(LIBFILE_ZLIB_IMPLIB ${CMAKE_BUILD_TYPE}/${LIBNAME_ZLIB}.lib)
 		set(LIBFILE_ZLIB_LIB ${CMAKE_BUILD_TYPE}/${LIBNAME_ZLIB_LIB}.lib)
 	else()
-		set(LIBFILE_ZLIB_DLL ${LIBNAME_ZLIB_DLL}.dll)
-		set(LIBFILE_ZLIB_IMPLIB ${LIBNAME_ZLIB_DLL}.lib)
+		set(LIBFILE_ZLIB_DLL ${LIBNAME_ZLIB}.dll)
+		set(LIBFILE_ZLIB_IMPLIB ${LIBNAME_ZLIB}.lib)
 		set(LIBFILE_ZLIB_LIB ${LIBNAME_ZLIB_LIB}.lib)
 	endif()
 
@@ -38,7 +38,7 @@ if(MSVC)
 	)
 elseif(APPLE)
 	set(FRAMEWORK_DIR_ZLIB ${DESTINATION_PATH}/${TARGET_ZLIB}.framework)
-	set(DYLIBNAME_ZLIB libz.1.3.2.dylib)
+	set(DYLIBNAME_ZLIB libz.1.4.dylib)
 
 	ExternalProject_Add(project_${TARGET_ZLIB}
 		URL ${URL_ZLIB}
