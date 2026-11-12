@@ -24,6 +24,13 @@ jobs:
     - name: 'Checkout code'
       uses: actions/checkout@v6
 
+    - name: 'Cache Library Sources'
+      uses: actions/cache@v5
+      with:
+        path: ${{ runner.workspace }}/nCine-libraries-build/ExternalProjects/Download
+        key: library-sources-${{ github.workflow }}-${{ hashFiles('cmake/*.cmake') }}
+        restore-keys: library-sources-${{ github.workflow }}-
+
     - name: 'CMake Configuration'
       run: |
         if [[ "${{ matrix.os }}" == "macOS-15" ]]; then
@@ -34,7 +41,11 @@ jobs:
 
     - name: 'Make'
       run: |
-        make -j $(getconf _NPROCESSORS_ONLN) -C ../nCine-libraries-build
+        for ATTEMPT in 1 2 3; do
+          make -j $(getconf _NPROCESSORS_ONLN) -C ../nCine-libraries-build && break
+          [ $ATTEMPT -lt 3 ] || exit 1
+          sleep $((ATTEMPT * 30))
+        done
 
     - name: 'Package'
       if: matrix.BuildType == 'Release'
@@ -102,7 +113,12 @@ jobs:
 
         export DEPLOY_BRANCH=`echo $DEPLOY_BRANCH | sed 's/OS/'"$OS"'/'`
         export DEPLOY_BRANCH=`echo $DEPLOY_BRANCH | sed 's/COMPILER/'"$CC"'/'`
-        git clone https://$PUBLIC_REPO_TOKEN@github.com/nCine/nCine-libraries-artifacts.git >/dev/null 2>&1
+        export AUTH_HEADER=$(printf "x-access-token:%s" $PUBLIC_REPO_TOKEN | base64)
+        echo "::add-mask::$AUTH_HEADER"
+        export GIT_CONFIG_COUNT=1
+        export GIT_CONFIG_KEY_0=http.extraheader
+        export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $AUTH_HEADER"
+        git clone https://github.com/nCine/nCine-libraries-artifacts.git >/dev/null 2>&1
         cd nCine-libraries-artifacts
         git checkout $DEPLOY_BRANCH || git checkout --orphan $DEPLOY_BRANCH
         git reset
@@ -111,4 +127,4 @@ jobs:
         mv -f ../$DEPLOY_FILE .
         git add $DEPLOY_FILE
         git commit --amend -m "$DEPLOY_MESSAGE" || git commit -m "$DEPLOY_MESSAGE"
-        git push --force || git push --set-upstream origin $DEPLOY_BRANCH
+        git push --force || git push --force --set-upstream origin $DEPLOY_BRANCH

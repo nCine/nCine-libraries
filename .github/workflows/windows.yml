@@ -23,13 +23,25 @@ jobs:
     - name: 'Checkout code'
       uses: actions/checkout@v6
 
+    - name: 'Cache Library Sources'
+      uses: actions/cache@v5
+      with:
+        path: ${{ runner.workspace }}/nCine-libraries-build/ExternalProjects/Download
+        key: library-sources-${{ github.workflow }}-${{ hashFiles('cmake/*.cmake') }}
+        restore-keys: library-sources-${{ github.workflow }}-
+
     - name: 'CMake Configuration'
       run: |
         cmake -G "Visual Studio 17 2022" -A x64 -B ../nCine-libraries-build
 
     - name: 'CMake Build'
       run: |
-        cmake --build ../nCine-libraries-build --config ${{ matrix.BuildType }} -j $env:NUMBER_OF_PROCESSORS
+        for ($i = 1; $i -le 3; $i++) {
+          cmake --build ../nCine-libraries-build --config ${{ matrix.BuildType }} -j $env:NUMBER_OF_PROCESSORS
+          if ($?) { break }
+          if ($i -eq 3) { exit 1 }
+          Start-Sleep -Seconds (30 * $i)
+        }
 
     - name: 'Package'
       if: matrix.BuildType == 'Release'
@@ -96,4 +108,4 @@ jobs:
         Move-Item -Path ..\$env:DEPLOY_FILE -Destination .
         git add $env:DEPLOY_FILE
         git commit --amend -m "$env:DEPLOY_MESSAGE"; if (-not $?) { git commit -m "$env:DEPLOY_MESSAGE" }
-        git push --force; if (-not $?) { git push --set-upstream origin $env:DEPLOY_BRANCH }
+        git push --force; if (-not $?) { git push --force --set-upstream origin $env:DEPLOY_BRANCH }

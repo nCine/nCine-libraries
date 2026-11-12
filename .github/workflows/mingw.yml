@@ -38,6 +38,13 @@ jobs:
     - name: 'Checkout code'
       uses: actions/checkout@v6
 
+    - name: 'Cache Library Sources'
+      uses: actions/cache@v5
+      with:
+        path: ${{ runner.workspace }}/nCine-libraries-build/ExternalProjects/Download
+        key: library-sources-${{ github.workflow }}-${{ hashFiles('cmake/*.cmake') }}
+        restore-keys: library-sources-${{ github.workflow }}-
+
     - name: 'Update MSYS2 on Windows'
       run: |
         $env:MSYSTEM = "MINGW64"
@@ -71,7 +78,7 @@ jobs:
         CHERE_INVOKING: on
       run: |
         $env:MSYSTEM = "MINGW64"
-        C:\msys64\usr\bin\bash.exe -lc 'make -j $NUMBER_OF_PROCESSORS -C ../nCine-libraries-build'
+        C:\msys64\usr\bin\bash.exe -lc 'for i in 1 2 3; do make -j $NUMBER_OF_PROCESSORS -C ../nCine-libraries-build && break; [ $i -lt 3 ] || exit 1; sleep $((i * 30)); done'
 
     - name: 'Package'
       if: matrix.BuildType == 'Release'
@@ -140,4 +147,4 @@ jobs:
         Move-Item -Path ..\$env:DEPLOY_FILE -Destination .
         git add $env:DEPLOY_FILE
         git commit --amend -m "$env:DEPLOY_MESSAGE"; if (-not $?) { git commit -m "$env:DEPLOY_MESSAGE" }
-        git push --force; if (-not $?) { git push --set-upstream origin $env:DEPLOY_BRANCH }
+        git push --force; if (-not $?) { git push --force --set-upstream origin $env:DEPLOY_BRANCH }

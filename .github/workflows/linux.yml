@@ -38,6 +38,13 @@ jobs:
     - name: 'Checkout code'
       uses: actions/checkout@v6
 
+    - name: 'Cache Library Sources'
+      uses: actions/cache@v5
+      with:
+        path: ${{ runner.workspace }}/nCine-libraries-build/ExternalProjects/Download
+        key: library-sources-${{ github.workflow }}-${{ hashFiles('cmake/*.cmake') }}
+        restore-keys: library-sources-${{ github.workflow }}-
+
     - name: 'Install Build Dependencies'
       run: |
         sudo apt-get update
@@ -52,7 +59,11 @@ jobs:
 
     - name: 'Make'
       run: |
-        make -j $(getconf _NPROCESSORS_ONLN) -C ../nCine-libraries-build
+        for ATTEMPT in 1 2 3; do
+          make -j $(getconf _NPROCESSORS_ONLN) -C ../nCine-libraries-build && break
+          [ $ATTEMPT -lt 3 ] || exit 1
+          sleep $((ATTEMPT * 30))
+        done
 
     - name: 'Package'
       if: matrix.BuildType == 'Release'
@@ -125,4 +136,4 @@ jobs:
         mv -f ../$DEPLOY_FILE .
         git add $DEPLOY_FILE
         git commit --amend -m "$DEPLOY_MESSAGE" || git commit -m "$DEPLOY_MESSAGE"
-        git push --force || git push --set-upstream origin $DEPLOY_BRANCH
+        git push --force || git push --force --set-upstream origin $DEPLOY_BRANCH
