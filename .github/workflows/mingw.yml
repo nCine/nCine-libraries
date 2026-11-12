@@ -11,7 +11,7 @@ env:
 on: [push, workflow_dispatch]
 
 jobs:
-  MinGW:
+  Build:
     strategy:
       fail-fast: false
       matrix:
@@ -36,7 +36,7 @@ jobs:
 
     steps:
     - name: 'Checkout code'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: 'Update MSYS2 on Windows'
       run: |
@@ -73,8 +73,44 @@ jobs:
         $env:MSYSTEM = "MINGW64"
         C:\msys64\usr\bin\bash.exe -lc 'make -j $NUMBER_OF_PROCESSORS -C ../nCine-libraries-build'
 
-    - name: 'Push Artifacts'
+    - name: 'Package'
       if: matrix.BuildType == 'Release'
+      run: |
+        mkdir nCine-job-artifacts
+        cd ..
+        7z a $env:GITHUB_WORKSPACE\nCine-job-artifacts\nCine-external.7z nCine-external
+
+    - name: 'Upload GitHub Actions Artifact'
+      if: matrix.BuildType == 'Release'
+      uses: actions/upload-artifact@v7
+      with:
+        name: nCine-libraries-mingw64-${{ matrix.CC }}
+        path: nCine-job-artifacts/*
+
+  Artifacts:
+    needs: Build
+    strategy:
+      fail-fast: false
+      matrix:
+        BuildType: [Release]
+        CC: [gcc, clang]
+
+    runs-on: 'windows-2022'
+    concurrency:
+        group: artifacts-mingw64-${{ matrix.CC }}
+        cancel-in-progress: false
+
+    steps:
+    - name: 'Checkout code'
+      uses: actions/checkout@v6
+
+    - name: 'Download GitHub Actions Artifact'
+      uses: actions/download-artifact@v8
+      with:
+        name: nCine-libraries-mingw64-${{ matrix.CC }}
+        path: nCine-job-artifacts
+
+    - name: 'Push Artifacts'
       env:
         PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
       run: |
@@ -93,7 +129,7 @@ jobs:
         $env:DEPLOY_FILE = -join($env:DEPLOY_FILE_NOEXT, ".7z")
         $env:DEPLOY_FILE = $env:DEPLOY_FILE -replace "OS","mingw64" -replace "COMPILER",$env:CC -replace "VERSION",$env:git_version
         $env:DEPLOY_BRANCH = $env:DEPLOY_BRANCH -replace "OS","mingw64" -replace "COMPILER",$env:CC
-        7z a $env:DEPLOY_FILE nCine-external
+        Move-Item -Path $env:GITHUB_WORKSPACE\nCine-job-artifacts\nCine-external.7z -Destination $env:DEPLOY_FILE
 
         git clone https://$env:PUBLIC_REPO_TOKEN@github.com/nCine/nCine-libraries-artifacts.git 2>&1>$null
         cd nCine-libraries-artifacts

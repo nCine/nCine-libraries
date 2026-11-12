@@ -11,7 +11,7 @@ env:
 on: [push, workflow_dispatch]
 
 jobs:
-  Emscripten:
+  Build:
     strategy:
       fail-fast: false
       matrix:
@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - name: 'Checkout code'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: 'Install Emscripten SDK'
       run: |
@@ -41,8 +41,42 @@ jobs:
         source ../emsdk/emsdk_env.sh
         make -j $(getconf _NPROCESSORS_ONLN) -C ../nCine-libraries-build
 
-    - name: 'Push Artifacts'
+    - name: 'Package'
       if: matrix.BuildType == 'Release'
+      run: |
+        mkdir nCine-job-artifacts
+        tar cpzf nCine-job-artifacts/nCine-external.tar.gz -C .. nCine-external-emscripten
+
+    - name: 'Upload GitHub Actions Artifact'
+      if: matrix.BuildType == 'Release'
+      uses: actions/upload-artifact@v7
+      with:
+        name: nCine-libraries-emscripten
+        path: nCine-job-artifacts/*
+
+  Artifacts:
+    needs: Build
+    strategy:
+      fail-fast: false
+      matrix:
+        BuildType: [Release]
+
+    runs-on: 'ubuntu-24.04'
+    concurrency:
+        group: artifacts-emscripten-emcc
+        cancel-in-progress: false
+
+    steps:
+    - name: 'Checkout code'
+      uses: actions/checkout@v6
+
+    - name: 'Download GitHub Actions Artifact'
+      uses: actions/download-artifact@v8
+      with:
+        name: nCine-libraries-emscripten
+        path: nCine-job-artifacts
+
+    - name: 'Push Artifacts'
       env:
         PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
       run: |
@@ -64,7 +98,7 @@ jobs:
         export DEPLOY_FILE=`echo $DEPLOY_FILE | sed 's/COMPILER/'"$CC"'/'`
         export DEPLOY_FILE=`echo $DEPLOY_FILE | sed 's/VERSION/'"$GIT_VERSION"'/'`
 
-        tar cpzf $DEPLOY_FILE nCine-external-emscripten
+        mv $GITHUB_WORKSPACE/nCine-job-artifacts/nCine-external.tar.gz $DEPLOY_FILE
 
         export DEPLOY_BRANCH=`echo $DEPLOY_BRANCH | sed 's/OS/'"$OS"'/'`
         export DEPLOY_BRANCH=`echo $DEPLOY_BRANCH | sed 's/COMPILER/'"$CC"'/'`

@@ -11,7 +11,7 @@ env:
 on: [push, workflow_dispatch]
 
 jobs:
-  Windows:
+  Build:
     strategy:
       fail-fast: false
       matrix:
@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - name: 'Checkout code'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: 'CMake Configuration'
       run: |
@@ -31,8 +31,43 @@ jobs:
       run: |
         cmake --build ../nCine-libraries-build --config ${{ matrix.BuildType }} -j $env:NUMBER_OF_PROCESSORS
 
-    - name: 'Push Artifacts'
+    - name: 'Package'
       if: matrix.BuildType == 'Release'
+      run: |
+        mkdir nCine-job-artifacts
+        cd ..
+        7z a $env:GITHUB_WORKSPACE\nCine-job-artifacts\nCine-external.7z nCine-external
+
+    - name: 'Upload GitHub Actions Artifact'
+      if: matrix.BuildType == 'Release'
+      uses: actions/upload-artifact@v7
+      with:
+        name: nCine-libraries-windows-vs2022
+        path: nCine-job-artifacts/*
+
+  Artifacts:
+    needs: Build
+    strategy:
+      fail-fast: false
+      matrix:
+        BuildType: [Release]
+
+    runs-on: 'windows-2022'
+    concurrency:
+        group: artifacts-windows-vs2022
+        cancel-in-progress: false
+
+    steps:
+    - name: 'Checkout code'
+      uses: actions/checkout@v6
+
+    - name: 'Download GitHub Actions Artifact'
+      uses: actions/download-artifact@v8
+      with:
+        name: nCine-libraries-windows-vs2022
+        path: nCine-job-artifacts
+
+    - name: 'Push Artifacts'
       env:
         PUBLIC_REPO_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
       run: |
@@ -50,7 +85,7 @@ jobs:
         $env:DEPLOY_FILE = -join($env:DEPLOY_FILE_NOEXT, ".7z")
         $env:DEPLOY_FILE = $env:DEPLOY_FILE -replace "OS","windows" -replace "COMPILER","vs2022" -replace "VERSION",$env:git_version
         $env:DEPLOY_BRANCH = $env:DEPLOY_BRANCH -replace "OS","windows" -replace "COMPILER","vs2022"
-        7z a $env:DEPLOY_FILE nCine-external
+        Move-Item -Path $env:GITHUB_WORKSPACE\nCine-job-artifacts\nCine-external.7z -Destination $env:DEPLOY_FILE
 
         git clone https://$env:PUBLIC_REPO_TOKEN@github.com/nCine/nCine-libraries-artifacts.git 2>&1>$null
         cd nCine-libraries-artifacts
